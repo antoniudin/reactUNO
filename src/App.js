@@ -1,25 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react'
+import UserContext from './context/UserContext'
+import CartContext from './context/CartContext'
+import UserPage from './context/UserPage'
+import UserPanel from './context/UserPanel'
+import CradDesk from './components/CardDesk'
+class App extends Component {
+  state = {
+    currentUser: {name: 'Tony', age:33},
+    currentCart: ['chocolate','waffle']
+}
+  
+  handleLogin = () => {
+    const user = {name: 'Tony Montana'}
+    this.setState({currentUser : user});
+  }
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  render() {
+    return (
+      <CartContext.Provider value={this.state.currentCart}>
+      <UserContext.Provider value={{currentUser: this.state.currentUser, onLoggedIn: this.handleLogin}}>
+        <div>
+          <UserPage/>
+          <UserPanel/>
+          <CradDesk/>
+        </div>
+      </UserContext.Provider>
+      </CartContext.Provider>
+    )
+  }
 }
 
 export default App;

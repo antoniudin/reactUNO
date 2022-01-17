@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
+import Tasks from './Tasks';
+import Counter from './hooks/counter';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
