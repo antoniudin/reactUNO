@@ -11,3 +11,36 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.card {
+  width: 30px;
+  height: 50px;
+  border-radius: 10px;
+  border: 2px solid black;
+  margin: 2px;
+  font-weight: bold;
+}
+
+.yellow {
+  background-color: yellow;
+}
+
+.red {
+  background-color: red;
+  color:white;
+}
+
+.blue {
+  background-color: blue;
+  color:white;
+}
+
+.green {
+  background-color:green;
+  color:white;
+}
+
+.playerCardBoard {
+  display: flex;
+  flex-direction: row;
+}
