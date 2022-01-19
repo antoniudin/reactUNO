@@ -1,8 +1,10 @@
 import React, { Component, Fragment } from 'react';
+import useScoreCounting from '../hooks/useScoreCounting';
 import cards from './cards.json'
+import Score from './Score';
 
 class Desk extends React.Component {
-    state= {
+    state = {
     //by now this array is har coded; next it's going to be generated
         cards: [
     {"id":1,"color": "red","value": "0"},
@@ -84,105 +86,219 @@ class Desk extends React.Component {
     {"id":77,"color": "green","value": "6"},
     {"id":78,"color": "green","value": "7"},
     {"id":79,"color": "green","value": "8"},
-    {"id":80,"color": "green","value": "9"}
+    {"id":80,"color": "green","value": "9"},
+    //skip cards
+    {"id":81,"color": "red","value": "S"},
+    {"id":82,"color": "red","value": "S"},
+    {"id":83,"color": "green","value": "S"},
+    {"id":84,"color": "green","value": "S"},
+    {"id":85,"color": "yellow","value": "S"},
+    {"id":86,"color": "yellow","value": "S"},
+    {"id":87,"color": "blue","value": "S"},
+    {"id":88,"color": "blue","value": "S"},
+    //reverse cards
+    {"id":89,"color": "red","value": "R"},
+    {"id":90,"color": "red","value": "R"},
+    {"id":91,"color": "green","value": "R"},
+    {"id":92,"color": "green","value": "R"},
+    {"id":93,"color": "yellow","value": "R"},
+    {"id":94,"color": "yellow","value": "R"},
+    {"id":95,"color": "blue","value": "R"},
+    {"id":96,"color": "blue","value": "R"},
+    //+2 cards
+    {"id":97,"color": "red","value": "+2"},
+    {"id":98,"color": "red","value": "+2"},
+    {"id":99,"color": "green","value": "+2"},
+    {"id":100,"color": "green","value": "+2"},
+    {"id":101,"color": "yellow","value": "+2"},
+    {"id":102,"color": "yellow","value": "+2"},
+    {"id":103,"color": "blue","value": "+2"},
+    {"id":104,"color": "blue","value": "+2"}
+
         ],
         //by now this array is har coded; next it's going to be generated
-        desk: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,
-            41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80],
         mainCard: null,
         forward: true,
         turn: 1,
+        nextTurn: 2,
         log:'',
         players: [
             {
                 id: 1,
-                name: "Player1",
+                name: "SOFIA",
                 turn: true,
+                score: 0,
                 cards:[]
             },
             {
                 id: 2,
-                name: "Player2",
+                name: "SAM",
                 turn: false,
+                score: 0,
                 cards:[]
             },
             {
                 id: 3,
-                name: "Player3",
+                name: "TONY",
                 turn: false,
+                score: 0,
                 cards:[]
             }
         ]
     }
      
+    componentDidMount() {
+        this.fillTheDesk();
+    }
+    
+    fillTheDesk = () => {
+        const desk = Array.from(Array(104).keys()).map(x=> ++x)
+        this.setState({desk})
+    }
+
+    populateTheDesk = () => {
+        const types = ['0','1','2','3','4','5','6','7','8','9']
+        const colors = ['red','yellow','blue','green']
+        colors.map(function(i){
+          //write a function to poulate a card desk with cards  
+        })
+    }
+    
     startNewGame = () => {
         this.initiateMainCard();
         //by now just call the following mwthod for 3 times; this part has to be refactored
-        this.handleCardToPlayer(1,5);
-        this.handleCardToPlayer(2,5);
-        this.handleCardToPlayer(3,5);
+        const amountOfCards = 5;
+        this.state.players.map((i)=> this.handleCardToPlayer(i.id, amountOfCards))
         console.log("The game started");
     }
 
-    updateMainCard = () => {
-        console.log("h")
-    }
-
-    removeCardFromPlayerBoard = () => {
-
-    }
-
-    handleTurn = () => {
-        
-    }
-
-    initiateMainCard = () => {
-        //this method is raised only once in the beginning of the game
-        const mainCard = this.takeRandomCardFromDesk()
+    updateMainCard = (cardId) => {
+        const mainCard = this.state.cards.find(card => card.id==cardId)
         this.setState({mainCard})
     }
 
-    commitTurn = (playerId) => {
-        if (this.state.forward) this.handleForwardTurn(playerId);
-        else this.handleBackwardTurn(playerId);
+    removeCardFromPlayerBoard = (cardId, playerId) => {
+        const player = this.state.players.find(player => player.id==playerId)
+        const card = player.cards.find(card => card.id==cardId)
+        const index = player.cards.indexOf(card)
+        // console.log(index)
+        player.cards.splice(index,1);
+        this.setState({player});
+        this.updateMainCard(cardId);
     }
 
-    handleForwardTurn = (playerId) => {
+    makeTurn = (playerId, cardId) => {
+        if (playerId==this.state.turn) {
+            console.log(`Player ${playerId} is about to use ${cardId}`)
+            this.compareTwoCards(cardId, playerId)
+        }
+        else console.log("Is not your turn")
+    }
+
+    compareTwoCards = (cardId, playerId) => {
+        const mainCard = this.state.mainCard;
+        const currentCard = this.state.cards.find(card=> card.id==cardId)
+        //If cards are not matching return false, otherwise raise 3 other methods
+        if (mainCard.color==currentCard.color || mainCard.value==currentCard.value) {
+            this.removeCardFromPlayerBoard(cardId, playerId)
+            //Check if the card used is special and additional action is required
+            this.checkSpecialCards(cardId);
+            this.completeTurn(playerId);
+            return true;
+        } return false;
+    }
+
+    handleTwoCard = (cardId) => {
+        //Find the player who is going to take 2 Cards
+        console.log(`Player ${this.state.nextTurn} is taking 2 CARDS!`);
+    }
+
+    handleFourCard = (cardId) => {
+        console.log(`Player ${this.state.nextTurn} is taking 4 CARDS!!!`);
+    }
+
+    handleWildCard = (cardId) => {
+        console.log(`Wild card! Player ${this.state.turn} is choosing a color`);
+    }
+
+    handleReverseCard = (cardId) => {
+        console.log(`The direction was changed!`);
+        this.changeDirection()
+    }    
+
+    handleSkipCard = (cardId) => {
+        console.log(`Player ${this.state.nextTurn} is skipping his turn!`);
+    }
+
+    checkSpecialCards = (cardId) => {
+        const card = this.state.cards.find(card => card.id==cardId)
+        switch (card.value) {
+            case 'R' : this.handleReverseCard(); break;
+            case 'S' : this.handleSkipCard(); break;
+            case '+2' : this.handleTwoCard(); break;
+            case '+4' : this.handleFourCard(); break;
+            case 'W' : this.handleWildCard(); break;
+        }
+    }
+
+    
+
+    initiateMainCard = () => {
+        //this method is raised only once in the beginning of the game
+        const mainCard = this.takeCardFromDesk()
+        this.setState({mainCard})
+    }
+
+    handleEndRound = () => {
+        console.log("The round is over")
+        //count the score than strat the round or call handleEndGame method
+        const looser = this.state.players.find(player => player.score>=100)
+        
+    }
+        
+    handleEndGame = () => {
+        // if (looser!=null) console(`${looser.name} was loose!`)
+    }
+
+    completeTurn = (playerId) => {
+        if (playerId!=this.state.turn) console.log("It's not your turn yet!")
+        else {
+            const player = this.state.players.find(player=> player.id==playerId)
+            if (this.state.forward) this.makeForwardTurn(playerId);
+            else this.makeBackwardTurn(playerId);
+        }
+    }
+
+    makeForwardTurn = (playerId) => {
         let turn = playerId;
         if (playerId<3) turn++; else turn = 1;
         this.setState({turn})
+        let nextTurn=turn+1;
+        if (nextTurn>3) nextTurn=1
+        this.setState({nextTurn})
+        // console.log(this.state.nextTurn);
     }
 
-    handleBackwardTurn = (playerId) => {
+    makeBackwardTurn = (playerId) => {
         let turn = playerId;
         if (playerId>1) turn--; else turn = 3;
         this.setState({turn})
+        let nextTurn=turn-1;
+        if (nextTurn<1) nextTurn=3;
+        this.setState({nextTurn})
+        // console.log(this.state.nextTurn);
     }
 
-
-    changeTurnDirection = () => {
+    changeDirection = () => {
         this.state.forward = !this.state.forward
-    }
-
-    compareTwoCards = (mainCard, playerCard) => {
-        if (playerCard.color=='wild') {
-            console.log(true)
-            console.log(mainCard)
-            console.log(playerCard)
-            return true;
-        }
-        if (mainCard.value == playerCard.value || mainCard.color == playerCard.color) {
-            console.log(true)
-            console.log(mainCard)
-            console.log(playerCard)
-            return true;
-        }
+        //experimental
+        this.completeTurn(this.state.turn)
     }
 
     handleCardToPlayer = (playerId, amountOfCards) => {
         let counter = 0;
         while (counter<amountOfCards) {
-            const result = this.takeRandomCardFromDesk();
+            const result = this.takeCardFromDesk();
             const player = this.state.players.find(player => player.id==playerId)
             player.cards.push(result)
             counter++;
@@ -191,7 +307,7 @@ class Desk extends React.Component {
         console.log(this.state.players)
     }
 
-    takeRandomCardFromDesk = () => {
+    takeCardFromDesk = () => {
         const desk = this.state.desk;
         //get a random card from the desk
         const card = desk[Math.floor(Math.random()*desk.length)]
@@ -204,41 +320,36 @@ class Desk extends React.Component {
         return currentCard;
     }
 
-    handleClaimUno = () => {
-
-    }
-
-    handleDrawCard = () => {
-
-    }
-
     render() { 
         return <div>
+
+            <Score a={1} b={2}/>
+
             <button onClick = {() => this.startNewGame()}>Start the GAME</button>
             
-            {this.state.forward && <p>FORWRD</p>}
-            {!this.state.forward && <p>BACKWARD</p>}
-            
-            <button onClick = {() => this.changeTurnDirection()}>Change the Direction</button>
-            
 
-            {/* <button onClick = {() => this.handleCardToPlayer(2)}>Give me a card</button>
-            <button onClick = {() => this.compareTwoCards({value:'2',color:'red'},{value:'9',color:'wild'})}>Compare</button>
-            <button onClick = {() => this.handleCardToPlayer(1,1)}>Give one random card</button> */}
+
+            
+            
+            <button onClick = {() => this.handleCardToPlayer(this.state.turn, 1)}>Grab a card from the desk</button>
+            
+            <div className="playerBoard">
+
             {this.state.players.map(player=> 
-                <div>
-                    <p>{player.name}</p>
-                    <button onClick={()=> this.commitTurn(player.id)}>Make a turn</button>
-                    {this.state.turn==player.id && <span>your turn</span>}
+                <div key={player.id}>    
+                    <div className={(this.state.turn==player.id ? 'textgreen' : 'textblack')}>{player.name}</div>
+                    <button onClick={()=> this.completeTurn(player.id)}>Skip my turn</button>
                         <div className="playerCardBoard">
                     {player.cards.map(card=>
-                        <div onClick={()=> this.commitTurn()} className={`card ${card.color}`}>{card.value}
+                        <div key={card.id} onClick={()=> this.makeTurn(player.id, card.id)} className={`card ${card.color}`}>{card.value}
                         </div>
                         )}
                         </div>
                         
+                        
                 </div>
                 )}
+                </div>
                         <Fragment>
                             <p>Main Card: </p>
                             {this.state.mainCard!=null && <div className={`card ${this.state.mainCard.color}`}>{this.state.mainCard.value}</div>}

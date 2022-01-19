@@ -40,7 +40,22 @@ code {
   color:white;
 }
 
+.playerBoard {
+  display: grid;
+  grid-template-columns: 250px 250px 250px;
+}
+
 .playerCardBoard {
   display: flex;
   flex-direction: row;
+}
+
+
+
+.textblack {
+  color:black;
+}
+
+.textgreen {
+  color:green;
 }

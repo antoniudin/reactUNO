@@ -1,6 +1,6 @@
 import React, {setState} from 'react'
 
-export default function PlayerCardBoard(props) {
+export default function PlayerBoard(props) {
     
     return (
         <div>
