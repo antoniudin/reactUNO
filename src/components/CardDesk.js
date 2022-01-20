@@ -2,11 +2,16 @@ import React, { Component, Fragment } from 'react';
 import useScoreCounting from '../hooks/useScoreCounting';
 import cards from './cards.json'
 import Score from './Score';
+import Player from './Player';
+import PopUp from './PopUp';
 
 class Desk extends React.Component {
     state = {
+    gameStatus: true,
+    roundStatus: true,
+    modal:false,        
     //by now this array is har coded; next it's going to be generated
-        cards: [
+        cards: [ 
     {"id":1,"color": "red","value": "0"},
     {"id":2,"color": "red","value": "1"},
     {"id":3,"color": "red","value": "2"},
@@ -113,8 +118,16 @@ class Desk extends React.Component {
     {"id":101,"color": "yellow","value": "+2"},
     {"id":102,"color": "yellow","value": "+2"},
     {"id":103,"color": "blue","value": "+2"},
-    {"id":104,"color": "blue","value": "+2"}
-
+    {"id":104,"color": "blue","value": "+2"},
+    //Wild cards
+    {"id":105,"color": "W","value": "W"},
+    {"id":106,"color": "W","value": "W"},
+    {"id":107,"color": "W","value": "W"},
+    {"id":108,"color": "W","value": "W"},
+    {"id":109,"color": "W","value": "+4"},
+    {"id":110,"color": "W","value": "+4"},
+    {"id":111,"color": "W","value": "+4"},
+    {"id":112,"color": "W","value": "+4"}
         ],
         //by now this array is har coded; next it's going to be generated
         mainCard: null,
@@ -122,6 +135,7 @@ class Desk extends React.Component {
         turn: 1,
         nextTurn: 2,
         log:'',
+        desk: [],
         players: [
             {
                 id: 1,
@@ -149,18 +163,22 @@ class Desk extends React.Component {
      
     componentDidMount() {
         this.fillTheDesk();
+        console.log(this.state.desk);
+        console.log('desk was filled');
     }
     
     fillTheDesk = () => {
-        const desk = Array.from(Array(104).keys()).map(x=> ++x)
+        const desk = Array.from(Array(112).keys()).map(x=> ++x)
         this.setState({desk})
+        console.log(this.state.desk);
+        console.log('desk was filled');
     }
 
-    populateTheDesk = () => {
+    populateTheCards = () => {
         const types = ['0','1','2','3','4','5','6','7','8','9']
         const colors = ['red','yellow','blue','green']
         colors.map(function(i){
-          //write a function to poulate a card desk with cards  
+          //write a function to populate a card desk with cards  
         })
     }
     
@@ -199,11 +217,11 @@ class Desk extends React.Component {
         const mainCard = this.state.mainCard;
         const currentCard = this.state.cards.find(card=> card.id==cardId)
         //If cards are not matching return false, otherwise raise 3 other methods
-        if (mainCard.color==currentCard.color || mainCard.value==currentCard.value) {
+        if (mainCard.color==currentCard.color || mainCard.value==currentCard.value || currentCard.color=="W") {
             this.removeCardFromPlayerBoard(cardId, playerId)
             //Check if the card used is special and additional action is required
-            this.checkSpecialCards(cardId);
             this.completeTurn(playerId);
+            this.checkSpecialCards(cardId);
             return true;
         } return false;
     }
@@ -211,14 +229,20 @@ class Desk extends React.Component {
     handleTwoCard = (cardId) => {
         //Find the player who is going to take 2 Cards
         console.log(`Player ${this.state.nextTurn} is taking 2 CARDS!`);
+        this.handleCardToPlayer(this.state.nextTurn, 2)
+        this.forceCompleteTurn(this.state.nextTurn)
     }
 
     handleFourCard = (cardId) => {
+        this.toggleModal();
         console.log(`Player ${this.state.nextTurn} is taking 4 CARDS!!!`);
+        this.handleCardToPlayer(this.state.nextTurn, 4)
+        this.forceCompleteTurn(this.state.nextTurn)
     }
 
     handleWildCard = (cardId) => {
         console.log(`Wild card! Player ${this.state.turn} is choosing a color`);
+        this.toggleModal();
     }
 
     handleReverseCard = (cardId) => {
@@ -228,6 +252,7 @@ class Desk extends React.Component {
 
     handleSkipCard = (cardId) => {
         console.log(`Player ${this.state.nextTurn} is skipping his turn!`);
+        this.forceCompleteTurn(this.state.nextTurn)
     }
 
     checkSpecialCards = (cardId) => {
@@ -241,8 +266,6 @@ class Desk extends React.Component {
         }
     }
 
-    
-
     initiateMainCard = () => {
         //this method is raised only once in the beginning of the game
         const mainCard = this.takeCardFromDesk()
@@ -252,14 +275,12 @@ class Desk extends React.Component {
     handleEndRound = () => {
         console.log("The round is over")
         //count the score than strat the round or call handleEndGame method
-        const looser = this.state.players.find(player => player.score>=100)
-        
+        this.state.players.map(function(player){
+            player.score = Score(player.cards)
+        })
+        console.log(this.state.players);
     }
-        
-    handleEndGame = () => {
-        // if (looser!=null) console(`${looser.name} was loose!`)
-    }
-
+    
     completeTurn = (playerId) => {
         if (playerId!=this.state.turn) console.log("It's not your turn yet!")
         else {
@@ -267,7 +288,26 @@ class Desk extends React.Component {
             if (this.state.forward) this.makeForwardTurn(playerId);
             else this.makeBackwardTurn(playerId);
         }
+        this.checkRoundIsOver(playerId);
+        //testing
+        console.log(this.state.desk);
     }
+
+    forceCompleteTurn = (playerId) => {
+        const player = this.state.players.find(player=> player.id==playerId)
+        if (this.state.forward) this.makeForwardTurn(playerId);
+        else this.makeBackwardTurn(playerId);
+    }
+
+    checkRoundIsOver = (playerId) => {
+        const player = this.state.players.find(player=> player.id==playerId)
+        if (player.cards.length==0) {
+            console.log(`"round is over ${player} has no cards`)
+            this.handleEndRound();    
+        }
+    }
+
+
 
     makeForwardTurn = (playerId) => {
         let turn = playerId;
@@ -309,46 +349,64 @@ class Desk extends React.Component {
 
     takeCardFromDesk = () => {
         const desk = this.state.desk;
+        console.log(`CURRENT DESK: ${this.state.desk}`);
         //get a random card from the desk
         const card = desk[Math.floor(Math.random()*desk.length)]
+        console.log(`random card: ${card}`);
         //find out the index of random card and remove it from desk
         const cardIndex = desk.indexOf(card)
+        console.log(`card index: ${cardIndex}`);
         desk.splice(cardIndex,1);
         //find out the card and update the desk
         const currentCard = this.state.cards.find(c => c.id==card);
+        console.log(`currentCard: ${currentCard.id}`);
         this.setState({desk})
         return currentCard;
     }
 
-    render() { 
-        return <div>
+    toggleModal = () => {
+        this.setState({
+         modal: !this.state.modal
+        });
+       };
 
-            <Score a={1} b={2}/>
+       ChooseColor = (color) => {
+        console.log(`${color} was choosed`);
+        const mainCard = this.state.mainCard;
+        mainCard.color=color;
+        this.setState({mainCard})
+       }
+
+    render() { 
+        // const scoreMe = Score(['1','W','+4','+2']);
+        return <div>
+            {/* <p>{scoreMe}</p> */}
+            <button onClick = {() => this.handleEndRound()}>END ROUND</button>
+
+            {this.state.modal ? <PopUp onColor={this.ChooseColor} onClose={this.toggleModal}/> : null}
+            <button onClick = {() => this.toggleModal()}>Call POP UP</button>
+
+            {this.state.players.map(player=>
+                <Player 
+                key={player.id} 
+                player={player} 
+                turn={this.state.turn}
+                nextTurn={this.state.next}
+                onMakeTurn = {this.makeTurn}
+                onCompleteTurn = {this.completeTurn}
+                />
+                )}
+
+
+
+            <button onClick = {() => this.forceCompleteTurn(this.state.nextTurn)}>Next player skips turn</button>
 
             <button onClick = {() => this.startNewGame()}>Start the GAME</button>
-            
-
-
-            
-            
+                
             <button onClick = {() => this.handleCardToPlayer(this.state.turn, 1)}>Grab a card from the desk</button>
             
             <div className="playerBoard">
 
-            {this.state.players.map(player=> 
-                <div key={player.id}>    
-                    <div className={(this.state.turn==player.id ? 'textgreen' : 'textblack')}>{player.name}</div>
-                    <button onClick={()=> this.completeTurn(player.id)}>Skip my turn</button>
-                        <div className="playerCardBoard">
-                    {player.cards.map(card=>
-                        <div key={card.id} onClick={()=> this.makeTurn(player.id, card.id)} className={`card ${card.color}`}>{card.value}
-                        </div>
-                        )}
-                        </div>
-                        
-                        
-                </div>
-                )}
                 </div>
                         <Fragment>
                             <p>Main Card: </p>

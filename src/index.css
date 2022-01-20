@@ -59,3 +59,15 @@ code {
 .textgreen {
   color:green;
 }
+
+.modal {
+  position: absolute;
+  width: 100%;
+  height:  100vh;
+  background-color: hotpink;
+}
+
+/* position: fixed;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%); */
