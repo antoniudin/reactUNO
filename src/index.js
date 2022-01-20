@@ -7,7 +7,7 @@ import Counter from './hooks/counter';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
-  <React.StrictMode>
+  <React.StrictMode>    
     <App />
   </React.StrictMode>,
   document.getElementById('root')
