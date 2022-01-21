@@ -21,7 +21,6 @@ class App extends Component {
       <CartContext.Provider value={this.state.currentCart}>
       <UserContext.Provider value={{currentUser: this.state.currentUser, onLoggedIn: this.handleLogin}}>
         <div>
-          {/* <GameLog/> */}
           <CradDesk/>
         </div>
       </UserContext.Provider>
