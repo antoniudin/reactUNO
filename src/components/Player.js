@@ -6,6 +6,7 @@ class Player extends Component {
         return (
             <div>
                 <div className={(turn===player.id ? 'textgreen' : 'textblack')}>{player.name}</div>
+                 <p>Score: {player.score}</p>
                  <button onClick={onCompleteTurn.bind(this, player.id)}>Skip my turn</button>
 
                  <div className="playerCardBoard">

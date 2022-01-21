@@ -4,11 +4,12 @@ import cards from './cards.json'
 import Score from './Score';
 import Player from './Player';
 import PopUp from './PopUp';
+import EndComponent from './EndComponent';
 
 class Desk extends React.Component {
     state = {
-    gameStatus: true,
-    roundStatus: true,
+    gameOver: false,
+    roundStatus: false,
     modal:false,        
     //by now this array is har coded; next it's going to be generated
         cards: [ 
@@ -162,33 +163,43 @@ class Desk extends React.Component {
     }
      
     componentDidMount() {
-        this.fillTheDesk();
+        this.fillTheDesk()
         console.log(this.state.desk);
-        console.log('desk was filled');
     }
     
-    fillTheDesk = () => {
-        const desk = Array.from(Array(112).keys()).map(x=> ++x)
-        this.setState({desk})
-        console.log(this.state.desk);
-        console.log('desk was filled');
+    //WARNING! To be deprecated in React v17. Use componentDidUpdate instead.
+    componentDidUpdate(prevProps, prevState) {
+
     }
 
-    populateTheCards = () => {
-        const types = ['0','1','2','3','4','5','6','7','8','9']
-        const colors = ['red','yellow','blue','green']
-        colors.map(function(i){
-          //write a function to populate a card desk with cards  
-        })
-    }
-    
     startNewGame = () => {
+        //Clean all previous data
+        const desk = [];
+        this.state.players.map((i)=> this.clearPlayersHand(i.id));
+        this.setState({desk})
+        this.fillTheDesk()
         this.initiateMainCard();
-        //by now just call the following mwthod for 3 times; this part has to be refactored
+        //by now just call the following method for 3 times; this part has to be refactored +
         const amountOfCards = 5;
         this.state.players.map((i)=> this.handleCardToPlayer(i.id, amountOfCards))
         console.log("The game started");
     }
+
+    fillTheDesk = () => {
+        const desk = Array.from(Array(112).keys()).map(x=> ++x)
+        this.setState({desk})
+        console.log('desk was filled');
+    }
+
+    populateTheCards = () => {
+        
+    }
+    
+   clearPlayersHand = (playerId) => {
+    const player = this.state.players.find(player => player.id==playerId);
+    player.cards = [];
+    this.setState({player})
+   }
 
     updateMainCard = (cardId) => {
         const mainCard = this.state.cards.find(card => card.id==cardId)
@@ -273,12 +284,20 @@ class Desk extends React.Component {
     }
 
     handleEndRound = () => {
+        //Transfer all the console.log messages to the GameLogComponent
         console.log("The round is over")
         //count the score than strat the round or call handleEndGame method
-        this.state.players.map(function(player){
-            player.score = Score(player.cards)
+        const players = this.state.players;
+        let gameOver = false;
+        players.map(function(player){
+            player.score += Score(player.cards);
+            if (player.score>100) gameOver=true; 
         })
-        console.log(this.state.players);
+        //HAVE TO call modal window 'END ROUND'
+        //HAVE TO CALL START GAME METHOD
+        this.setState({players, gameOver})
+        this.toggleEndComponent();
+
     }
     
     completeTurn = (playerId) => {
@@ -301,8 +320,9 @@ class Desk extends React.Component {
 
     checkRoundIsOver = (playerId) => {
         const player = this.state.players.find(player=> player.id==playerId)
-        if (player.cards.length==0) {
+        if (player.cards.length===0) {
             console.log(`"round is over ${player} has no cards`)
+            console.log(this.state.roundStatus);
             this.handleEndRound();    
         }
     }
@@ -349,7 +369,6 @@ class Desk extends React.Component {
 
     takeCardFromDesk = () => {
         const desk = this.state.desk;
-        console.log(`CURRENT DESK: ${this.state.desk}`);
         //get a random card from the desk
         const card = desk[Math.floor(Math.random()*desk.length)]
         console.log(`random card: ${card}`);
@@ -368,7 +387,15 @@ class Desk extends React.Component {
         this.setState({
          modal: !this.state.modal
         });
-       };
+       }
+
+    toggleEndComponent = () => {
+        console.log("TOGGLING");
+        this.setState({
+            roundStatus: !this.state.roundStatus
+           });
+    }
+
 
        ChooseColor = (color) => {
         console.log(`${color} was choosed`);
@@ -382,7 +409,7 @@ class Desk extends React.Component {
         return <div>
             {/* <p>{scoreMe}</p> */}
             <button onClick = {() => this.handleEndRound()}>END ROUND</button>
-
+            {this.state.roundStatus ? <EndComponent players={this.state.players} gameOver={this.state.gameOver} onStart={this.startNewGame} onClose={this.toggleEndComponent}/> : null}
             {this.state.modal ? <PopUp onColor={this.ChooseColor} onClose={this.toggleModal}/> : null}
             <button onClick = {() => this.toggleModal()}>Call POP UP</button>
 
