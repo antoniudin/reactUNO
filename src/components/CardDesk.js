@@ -1,136 +1,18 @@
 import React, { Component, Fragment } from 'react';
 import useScoreCounting from '../hooks/useScoreCounting';
-import cards from './cards.json'
 import Score from './Score';
 import Player from './Player';
 import PopUp from './PopUp';
 import EndComponent from './EndComponent';
+import FillDesk from './FillDesk';
+import FillCards from './FillCards';
 
 class Desk extends React.Component {
     state = {
     gameOver: false,
     roundStatus: false,
     modal:false,        
-    //by now this array is har coded; next it's going to be generated
-        cards: [ 
-    {"id":1,"color": "red","value": "0"},
-    {"id":2,"color": "red","value": "1"},
-    {"id":3,"color": "red","value": "2"},
-    {"id":4,"color": "red","value": "3"},
-    {"id":5,"color": "red","value": "4"},
-    {"id":6,"color": "red","value": "5"},
-    {"id":7,"color": "red","value": "6"},
-    {"id":8,"color": "red","value": "7"},
-    {"id":9,"color": "red","value": "8"},
-    {"id":10,"color": "red","value": "9"},
-    {"id":11,"color": "red","value": "0"},
-    {"id":12,"color": "red","value": "1"},
-    {"id":13,"color": "red","value": "2"},
-    {"id":14,"color": "red","value": "3"},
-    {"id":15,"color": "red","value": "4"},
-    {"id":16,"color": "red","value": "5"},
-    {"id":17,"color": "red","value": "6"},
-    {"id":18,"color": "red","value": "7"},
-    {"id":19,"color": "red","value": "8"},
-    {"id":20,"color": "red","value": "9"},
-    {"id":21,"color": "yellow","value": "0"},
-    {"id":22,"color": "yellow","value": "1"},
-    {"id":23,"color": "yellow","value": "2"},
-    {"id":24,"color": "yellow","value": "3"},
-    {"id":25,"color": "yellow","value": "4"},
-    {"id":26,"color": "yellow","value": "5"},
-    {"id":27,"color": "yellow","value": "6"},
-    {"id":28,"color": "yellow","value": "7"},
-    {"id":29,"color": "yellow","value": "8"},
-    {"id":31,"color": "yellow","value": "9"},
-    {"id":31,"color": "yellow","value": "0"},
-    {"id":32,"color": "yellow","value": "1"},
-    {"id":33,"color": "yellow","value": "2"},
-    {"id":34,"color": "yellow","value": "3"},
-    {"id":35,"color": "yellow","value": "4"},
-    {"id":36,"color": "yellow","value": "5"},
-    {"id":37,"color": "yellow","value": "6"},
-    {"id":38,"color": "yellow","value": "7"},
-    {"id":39,"color": "yellow","value": "8"},
-    {"id":40,"color": "yellow","value": "9"},
-    {"id":41,"color": "blue","value": "0"},
-    {"id":42,"color": "blue","value": "1"},
-    {"id":43,"color": "blue","value": "2"},
-    {"id":44,"color": "blue","value": "3"},
-    {"id":45,"color": "blue","value": "4"},
-    {"id":46,"color": "blue","value": "5"},
-    {"id":47,"color": "blue","value": "6"},
-    {"id":48,"color": "blue","value": "7"},
-    {"id":49,"color": "blue","value": "8"},
-    {"id":50,"color": "blue","value": "9"},
-    {"id":51,"color": "blue","value": "0"},
-    {"id":52,"color": "blue","value": "1"},
-    {"id":53,"color": "blue","value": "2"},
-    {"id":54,"color": "blue","value": "3"},
-    {"id":55,"color": "blue","value": "4"},
-    {"id":56,"color": "blue","value": "5"},
-    {"id":57,"color": "blue","value": "6"},
-    {"id":58,"color": "blue","value": "7"},
-    {"id":59,"color": "blue","value": "8"},
-    {"id":60,"color": "blue","value": "9"},
-    {"id":61,"color": "green","value": "0"},
-    {"id":62,"color": "green","value": "1"},
-    {"id":63,"color": "green","value": "2"},
-    {"id":64,"color": "green","value": "3"},
-    {"id":65,"color": "green","value": "4"},
-    {"id":66,"color": "green","value": "5"},
-    {"id":67,"color": "green","value": "6"},
-    {"id":68,"color": "green","value": "7"},
-    {"id":69,"color": "green","value": "8"},
-    {"id":70,"color": "green","value": "9"},
-    {"id":71,"color": "green","value": "0"},
-    {"id":72,"color": "green","value": "1"},
-    {"id":73,"color": "green","value": "2"},
-    {"id":74,"color": "green","value": "3"},
-    {"id":75,"color": "green","value": "4"},
-    {"id":76,"color": "green","value": "5"},
-    {"id":77,"color": "green","value": "6"},
-    {"id":78,"color": "green","value": "7"},
-    {"id":79,"color": "green","value": "8"},
-    {"id":80,"color": "green","value": "9"},
-    //skip cards
-    {"id":81,"color": "red","value": "S"},
-    {"id":82,"color": "red","value": "S"},
-    {"id":83,"color": "green","value": "S"},
-    {"id":84,"color": "green","value": "S"},
-    {"id":85,"color": "yellow","value": "S"},
-    {"id":86,"color": "yellow","value": "S"},
-    {"id":87,"color": "blue","value": "S"},
-    {"id":88,"color": "blue","value": "S"},
-    //reverse cards
-    {"id":89,"color": "red","value": "R"},
-    {"id":90,"color": "red","value": "R"},
-    {"id":91,"color": "green","value": "R"},
-    {"id":92,"color": "green","value": "R"},
-    {"id":93,"color": "yellow","value": "R"},
-    {"id":94,"color": "yellow","value": "R"},
-    {"id":95,"color": "blue","value": "R"},
-    {"id":96,"color": "blue","value": "R"},
-    //+2 cards
-    {"id":97,"color": "red","value": "+2"},
-    {"id":98,"color": "red","value": "+2"},
-    {"id":99,"color": "green","value": "+2"},
-    {"id":100,"color": "green","value": "+2"},
-    {"id":101,"color": "yellow","value": "+2"},
-    {"id":102,"color": "yellow","value": "+2"},
-    {"id":103,"color": "blue","value": "+2"},
-    {"id":104,"color": "blue","value": "+2"},
-    //Wild cards
-    {"id":105,"color": "W","value": "W"},
-    {"id":106,"color": "W","value": "W"},
-    {"id":107,"color": "W","value": "W"},
-    {"id":108,"color": "W","value": "W"},
-    {"id":109,"color": "W","value": "+4"},
-    {"id":110,"color": "W","value": "+4"},
-    {"id":111,"color": "W","value": "+4"},
-    {"id":112,"color": "W","value": "+4"}
-        ],
-        //by now this array is har coded; next it's going to be generated
+        cards: [],
         mainCard: null,
         forward: true,
         turn: 1,
@@ -138,46 +20,23 @@ class Desk extends React.Component {
         log:'',
         desk: [],
         players: [
-            {
-                id: 1,
-                name: "SOFIA",
-                turn: true,
-                score: 0,
-                cards:[]
-            },
-            {
-                id: 2,
-                name: "SAM",
-                turn: false,
-                score: 0,
-                cards:[]
-            },
-            {
-                id: 3,
-                name: "TONY",
-                turn: false,
-                score: 0,
-                cards:[]
-            }
+            {id: 1, name: "YOU", turn: true, score: 0, cards:[]},
+            {id: 2, name: "PLAYER_1", turn: false, score: 0, cards:[]},
+            {id: 3, name: "PLAYER_2", turn: false, score: 0, cards:[]},
         ]
     }
      
     componentDidMount() {
-        this.fillTheDesk()
-        console.log(this.state.desk);
+        const cards = FillCards();   
+        const desk = FillDesk(); 
+        this.setState({desk,cards})
     }
     
-    //WARNING! To be deprecated in React v17. Use componentDidUpdate instead.
-    componentDidUpdate(prevProps, prevState) {
-
-    }
-
     startNewGame = () => {
         //Clean all previous data
-        const desk = [];
-        this.state.players.map((i)=> this.clearPlayersHand(i.id));
+        const desk = FillDesk(); 
         this.setState({desk})
-        this.fillTheDesk()
+        this.state.players.map((i)=> this.clearPlayersHand(i.id));
         this.initiateMainCard();
         //by now just call the following method for 3 times; this part has to be refactored +
         const amountOfCards = 5;
@@ -185,16 +44,11 @@ class Desk extends React.Component {
         console.log("The game started");
     }
 
-    fillTheDesk = () => {
-        const desk = Array.from(Array(112).keys()).map(x=> ++x)
-        this.setState({desk})
-        console.log('desk was filled');
-    }
+    // fillTheDesk = () => {
+    //     const desk = FillDesk(); 
+    //     this.setState({desk})
+    // }
 
-    populateTheCards = () => {
-        
-    }
-    
    clearPlayersHand = (playerId) => {
     const player = this.state.players.find(player => player.id==playerId);
     player.cards = [];
@@ -308,8 +162,6 @@ class Desk extends React.Component {
             else this.makeBackwardTurn(playerId);
         }
         this.checkRoundIsOver(playerId);
-        //testing
-        console.log(this.state.desk);
     }
 
     forceCompleteTurn = (playerId) => {
@@ -326,8 +178,6 @@ class Desk extends React.Component {
             this.handleEndRound();    
         }
     }
-
-
 
     makeForwardTurn = (playerId) => {
         let turn = playerId;
@@ -351,7 +201,6 @@ class Desk extends React.Component {
 
     changeDirection = () => {
         this.state.forward = !this.state.forward
-        //experimental
         this.completeTurn(this.state.turn)
     }
 
@@ -405,13 +254,11 @@ class Desk extends React.Component {
        }
 
     render() { 
-        // const scoreMe = Score(['1','W','+4','+2']);
         return <div>
-            {/* <p>{scoreMe}</p> */}
             <button onClick = {() => this.handleEndRound()}>END ROUND</button>
+
             {this.state.roundStatus ? <EndComponent players={this.state.players} gameOver={this.state.gameOver} onStart={this.startNewGame} onClose={this.toggleEndComponent}/> : null}
             {this.state.modal ? <PopUp onColor={this.ChooseColor} onClose={this.toggleModal}/> : null}
-            <button onClick = {() => this.toggleModal()}>Call POP UP</button>
 
             {this.state.players.map(player=>
                 <Player 
@@ -423,10 +270,6 @@ class Desk extends React.Component {
                 onCompleteTurn = {this.completeTurn}
                 />
                 )}
-
-
-
-            <button onClick = {() => this.forceCompleteTurn(this.state.nextTurn)}>Next player skips turn</button>
 
             <button onClick = {() => this.startNewGame()}>Start the GAME</button>
                 
