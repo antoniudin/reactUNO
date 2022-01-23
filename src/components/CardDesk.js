@@ -8,6 +8,7 @@ import FillDesk from './FillDesk';
 import FillCards from './FillCards';
 
 class Desk extends React.Component {
+    
     state = {
     gameOver: false,
     roundStatus: false,
@@ -19,15 +20,16 @@ class Desk extends React.Component {
         nextTurn: 2,
         log:'',
         desk: [],
+        colors : ['yellow', 'blue', 'red', 'green','yellow', 'blue', 'red', 'green'],
         players: [
-            {id: 1, name: "YOU", turn: true, score: 0, cards:[]},
-            {id: 2, name: "PLAYER_1", turn: false, score: 0, cards:[]},
-            {id: 3, name: "PLAYER_2", turn: false, score: 0, cards:[]},
+            {id: 1, name: "YOU", turn: true, score: 0, cards:[],desk:false},
+            {id: 2, name: "PLAYER_1", turn: false, score: 0, cards:[],desk:false},
+            {id: 3, name: "PLAYER_2", turn: false, score: 0, cards:[],desk:false},
         ]
     }
      
     componentDidMount() {
-        const cards = FillCards();   
+        const cards = FillCards(this.state.colors);   
         const desk = FillDesk(); 
         this.setState({desk,cards})
     }
@@ -42,12 +44,8 @@ class Desk extends React.Component {
         const amountOfCards = 5;
         this.state.players.map((i)=> this.handleCardToPlayer(i.id, amountOfCards))
         console.log("The game started");
+        console.log(this.state.desk.length);
     }
-
-    // fillTheDesk = () => {
-    //     const desk = FillDesk(); 
-    //     this.setState({desk})
-    // }
 
    clearPlayersHand = (playerId) => {
     const player = this.state.players.find(player => player.id==playerId);
@@ -134,6 +132,7 @@ class Desk extends React.Component {
     initiateMainCard = () => {
         //this method is raised only once in the beginning of the game
         const mainCard = this.takeCardFromDesk()
+        if (mainCard.color=='W') mainCard.color = this.state.colors[Math.floor(Math.random()*this.state.colors.length)]
         this.setState({mainCard})
     }
 
@@ -158,6 +157,7 @@ class Desk extends React.Component {
         if (playerId!=this.state.turn) console.log("It's not your turn yet!")
         else {
             const player = this.state.players.find(player=> player.id==playerId)
+            player.desk=false
             if (this.state.forward) this.makeForwardTurn(playerId);
             else this.makeBackwardTurn(playerId);
         }
@@ -239,11 +239,19 @@ class Desk extends React.Component {
        }
 
     toggleEndComponent = () => {
-        console.log("TOGGLING");
         this.setState({
             roundStatus: !this.state.roundStatus
            });
     }
+
+        grabCardFromDesk = () =>{
+            const player = this.state.players.find(player => player.id==this.state.turn)
+            if (!player.desk) {
+                player.desk = true;
+                this.handleCardToPlayer(this.state.turn, 1)
+            } else console.log('You got one!');
+            
+        }
 
 
        ChooseColor = (color) => {
@@ -273,7 +281,7 @@ class Desk extends React.Component {
 
             <button onClick = {() => this.startNewGame()}>Start the GAME</button>
                 
-            <button onClick = {() => this.handleCardToPlayer(this.state.turn, 1)}>Grab a card from the desk</button>
+            <button onClick = {() => this.grabCardFromDesk()}>Grab a card from the desk</button>
             
             <div className="playerBoard">
 
