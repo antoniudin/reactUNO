@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import useScoreCounting from '../hooks/useScoreCounting';
 import Score from './Score';
 import Player from './Player';
@@ -7,7 +8,8 @@ import EndComponent from './EndComponent';
 import FillDesk from './FillDesk';
 import FillCards from './FillCards';
 
-class Desk extends React.Component {
+class CardDesk extends React.Component {
+
     
     state = {
     gameOver: false,
@@ -261,8 +263,15 @@ class Desk extends React.Component {
         this.setState({mainCard})
        }
 
+       testClick = () => {
+            console.log("test passed");
+       }
+
+
     render() { 
-        return <div>
+        
+        return <div> 
+            
             <button onClick = {() => this.handleEndRound()}>END ROUND</button>
 
             {this.state.roundStatus ? <EndComponent players={this.state.players} gameOver={this.state.gameOver} onStart={this.startNewGame} onClose={this.toggleEndComponent}/> : null}
@@ -294,4 +303,4 @@ class Desk extends React.Component {
     }
 }
  
-export default Desk;
+export default CardDesk;
