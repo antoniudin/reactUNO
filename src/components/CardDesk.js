@@ -1,11 +1,14 @@
 import React, { Component, Fragment } from 'react';
+import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import useScoreCounting from '../hooks/useScoreCounting';
 import cards from './cards.json'
 import Score from './Score';
 import Player from './Player';
 import PopUp from './PopUp';
+import GameBoard from './GameBoard';
 
-class Desk extends React.Component {
+class CardDesk extends React.Component {
+    
     state = {
     gameStatus: true,
     roundStatus: true,
@@ -377,10 +380,15 @@ class Desk extends React.Component {
         this.setState({mainCard})
        }
 
+       testClick = () => {
+            console.log("test passed");
+       }
+
+
     render() { 
-        // const scoreMe = Score(['1','W','+4','+2']);
-        return <div>
-            {/* <p>{scoreMe}</p> */}
+        
+        return <div> 
+            
             <button onClick = {() => this.handleEndRound()}>END ROUND</button>
 
             {this.state.modal ? <PopUp onColor={this.ChooseColor} onClose={this.toggleModal}/> : null}
@@ -416,4 +424,4 @@ class Desk extends React.Component {
     }
 }
  
-export default Desk;
+export default CardDesk;

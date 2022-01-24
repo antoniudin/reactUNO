@@ -5,11 +5,15 @@ import App from './App';
 import Tasks from './Tasks';
 import Counter from './hooks/counter';
 import reportWebVitals from './reportWebVitals';
+import HomePage from './components/HomePage';
+import CardDesk from './components/CardDesk';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import GameBoard from './components/GameBoard'
 
 ReactDOM.render(
-  <React.StrictMode>    
-    <App />
-  </React.StrictMode>,
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>,
   document.getElementById('root')
 );
 
