@@ -7,10 +7,12 @@ import PopUp from './PopUp';
 import EndComponent from './EndComponent';
 import FillDesk from './FillDesk';
 import FillCards from './FillCards';
+import TestRouteComponent from './TestRouteComponent';
+import PlayerContext from '../context/PlayerContext';
+import GameOver from './GameOver';
 
 class CardDesk extends React.Component {
-
-    
+    static playerContext = PlayerContext;
     state = {
     gameOver: false,
     roundStatus: false,
@@ -46,7 +48,6 @@ class CardDesk extends React.Component {
         const amountOfCards = 5;
         this.state.players.map((i)=> this.handleCardToPlayer(i.id, amountOfCards))
         console.log("The game started");
-        console.log(this.state.desk.length);
     }
 
    clearPlayersHand = (playerId) => {
@@ -151,7 +152,8 @@ class CardDesk extends React.Component {
         //HAVE TO call modal window 'END ROUND'
         //HAVE TO CALL START GAME METHOD
         this.setState({players, gameOver})
-        this.toggleEndComponent();
+        // this.toggleEndComponent();
+        this.startNewGame();
 
     }
     
@@ -255,7 +257,6 @@ class CardDesk extends React.Component {
             
         }
 
-
        ChooseColor = (color) => {
         console.log(`${color} was choosed`);
         const mainCard = this.state.mainCard;
@@ -263,15 +264,13 @@ class CardDesk extends React.Component {
         this.setState({mainCard})
        }
 
-       testClick = () => {
-            console.log("test passed");
-       }
-
-
     render() { 
-        
-        return <div> 
+        return (
+        <PlayerContext.Consumer>
+            {PlayerContext => <div> 
             
+            {this.state.gameOver && <TestRouteComponent players={this.state.players}/>}
+
             <button onClick = {() => this.handleEndRound()}>END ROUND</button>
 
             {this.state.roundStatus ? <EndComponent players={this.state.players} gameOver={this.state.gameOver} onStart={this.startNewGame} onClose={this.toggleEndComponent}/> : null}
@@ -293,14 +292,17 @@ class CardDesk extends React.Component {
             <button onClick = {() => this.grabCardFromDesk()}>Grab a card from the desk</button>
             
             <div className="playerBoard">
-
                 </div>
                         <Fragment>
                             <p>Main Card: </p>
                             {this.state.mainCard!=null && <div className={`card ${this.state.mainCard.color}`}>{this.state.mainCard.value}</div>}
                         </Fragment>
-        </div>;
+                </div>
+        }
+        </PlayerContext.Consumer>
+        )
     }
 }
- 
+
+CardDesk.contextType = PlayerContext;
 export default CardDesk;

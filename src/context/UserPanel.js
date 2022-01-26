@@ -1,9 +1,9 @@
 import React, {useContext, useEffect} from 'react'
-import UserContext from './UserContext'
+import PlayerContext from './PlayerContext'
 import CartContext from './CartContext'
 
 function UserPanel(props) {
-    const context = useContext(UserContext)
+    const context = useContext(PlayerContext)
     const cartContext = useContext(CartContext)
     
     useEffect = () => {

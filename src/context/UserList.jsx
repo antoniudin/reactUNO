@@ -1,18 +1,18 @@
 import React, { Component } from 'react'
-import UserContext from './UserContext'
+import PlayerContext from './PlayerContext'
 
 class UserList extends Component {
 
     render() {
-        console.log(UserContext)
+        console.log(PlayerContext)
         return (
-            <UserContext.Consumer>
-            { UserContext => <div>User List {UserContext.currentUser ? UserContext.currentUser.name : "123"}</div>}
-            </UserContext.Consumer>
+            <PlayerContext.Consumer>
+            { PlayerContext => <div>User List {PlayerContext.currentUser ? PlayerContext.currentUser.name : "123"}</div>}
+            </PlayerContext.Consumer>
         )
     }
 }
 
-UserList.contextType = UserContext;
+UserList.contextType = PlayerContext;
 
 export default UserList;
