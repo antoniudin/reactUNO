@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
 class Player extends Component {
-    state = {  } 
     render() { 
-        const {player, turn, nextTurn, onMakeTurn, onCompleteTurn} = this.props;
+        const {player, turn, nextTurn, onMakeTurn, onCompleteTurn, mainCard} = this.props;
         return (
-            <div>
-                <div className={(turn===player.id ? 'textgreen' : 'textblack')}>{player.name}</div>
-                 <p>Score: {player.score}</p>
-                 <button onClick={onCompleteTurn.bind(this, player.id)}>Skip my turn</button>
+            <div className="playerBoard">
+                <div className={(turn===player.id ? 'active' : 'noActive')}>{player.name}</div>
+                 <div className="scoreTitle">Score: {player.score}</div>
+                 {mainCard!= null && <button onClick={onCompleteTurn.bind(this, player.id)}>Skip my turn</button>}
 
-                 <div className="playerCardBoard">
+                 <div className="playerCards">
                  {player.cards.map(card=>
                     <div key={card.id} onClick={onMakeTurn.bind(this, player.id, card.id)} className={`card ${card.color}`}>{card.value}
                     </div>
