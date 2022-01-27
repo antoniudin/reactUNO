@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 class GameBoard extends Component {
-    state = {  } 
+    //This component is useless and can be deleted
     
     render() { 
         <button onClick={()=> this.click()}>GO</button>
@@ -19,7 +19,7 @@ class GameBoard extends Component {
                     <div>
                         {playerTemplate}
                     </div>
-                    <div></div>
+                    <div>CARDS PILE</div>
                     <div>
                         {playerTemplate}
                     </div>

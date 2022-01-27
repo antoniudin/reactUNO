@@ -12,23 +12,22 @@ import PlayerContext from '../context/PlayerContext';
 import GameOver from './GameOver';
 
 class CardDesk extends React.Component {
-    static playerContext = PlayerContext;
     state = {
     gameOver: false,
     roundStatus: false,
     modal:false,        
-        cards: [],
-        mainCard: null,
-        forward: true,
-        turn: 1,
-        nextTurn: 2,
-        log:'',
-        desk: [],
-        colors : ['yellow', 'blue', 'red', 'green','yellow', 'blue', 'red', 'green'],
-        players: [
-            {id: 1, name: "YOU", turn: true, score: 0, cards:[],desk:false},
-            {id: 2, name: "PLAYER_1", turn: false, score: 0, cards:[],desk:false},
-            {id: 3, name: "PLAYER_2", turn: false, score: 0, cards:[],desk:false},
+    message:'" press start to start the game "',
+    cards: [],
+    mainCard: null,
+    forward: true,
+    turn: 1,
+    nextTurn: 2,
+    desk: [],
+    colors : ['yellow', 'blue', 'red', 'green','yellow', 'blue', 'red', 'green'],
+    players: [
+        {id: 1, name: "Player 1", turn: true, score: 0, cards:[],desk:false},
+        {id: 2, name: "Player 2", turn: false, score: 0, cards:[],desk:false},
+        {id: 3, name: "Player 3", turn: false, score: 0, cards:[],desk:false},
         ]
     }
      
@@ -39,15 +38,13 @@ class CardDesk extends React.Component {
     }
     
     startNewGame = () => {
-        //Clean all previous data
         const desk = FillDesk(); 
-        this.setState({desk})
+        const message = `" Player ${this.state.turn} is making his turn "`;
+        this.setState({desk,message})
         this.state.players.map((i)=> this.clearPlayersHand(i.id));
         this.initiateMainCard();
-        //by now just call the following method for 3 times; this part has to be refactored +
         const amountOfCards = 5;
         this.state.players.map((i)=> this.handleCardToPlayer(i.id, amountOfCards))
-        console.log("The game started");
     }
 
    clearPlayersHand = (playerId) => {
@@ -82,10 +79,8 @@ class CardDesk extends React.Component {
     compareTwoCards = (cardId, playerId) => {
         const mainCard = this.state.mainCard;
         const currentCard = this.state.cards.find(card=> card.id==cardId)
-        //If cards are not matching return false, otherwise raise 3 other methods
         if (mainCard.color==currentCard.color || mainCard.value==currentCard.value || currentCard.color=="W") {
             this.removeCardFromPlayerBoard(cardId, playerId)
-            //Check if the card used is special and additional action is required
             this.completeTurn(playerId);
             this.checkSpecialCards(cardId);
             return true;
@@ -265,38 +260,77 @@ class CardDesk extends React.Component {
        }
 
     render() { 
+        const player1 = this.state.players.find(player=> player.id==1)
+        const player2 = this.state.players.find(player=> player.id==2)
+        const player3 = this.state.players.find(player=> player.id==3)
+
         return (
         <PlayerContext.Consumer>
             {PlayerContext => <div> 
-            
+
+            <div className="gameBoard">
+                <div className="upper">
+                 <div>
+                 {this.state.mainCard!=null && <Player 
+                        key={player1.id} 
+                        player={player1} 
+                        turn={this.state.turn}
+                        nextTurn={this.state.next}
+                        onMakeTurn = {this.makeTurn}
+                        onCompleteTurn = {this.completeTurn}
+                    />}
+                    </div>
+                    <div>
+                    {this.state.mainCard!=null && <div className="mainCard">Main Card: 
+                        <div className={`card ${this.state.mainCard.color}`}>{this.state.mainCard.value}</div>
+                        <button onClick = {() => this.grabCardFromDesk()}>Grab a card</button>
+                        <button onClick = {() => this.handleEndRound()}>END ROUND</button>
+                        </div>}
+                        
+                        <div className="modal_holder">
+                            {this.state.modal ? <PopUp onColor={this.ChooseColor} onClose={this.toggleModal}/> : null}
+                            {this.state.message}
+                            {this.state.mainCard==null && <button onClick = {() => this.startNewGame()}>Start the GAME</button>}
+                        </div>
+                        
+                    </div>
+                    {this.state.mainCard!=null && <div>
+                    <Player 
+                        key={player2.id} 
+                        player={player2} 
+                        turn={this.state.turn}
+                        nextTurn={this.state.next}
+                        onMakeTurn = {this.makeTurn}
+                        onCompleteTurn = {this.completeTurn}
+                    />
+                    </div>}
+                </div>
+                <div className="bottom">
+                    <div></div>
+                    {this.state.mainCard!=null && <div>
+                    <Player 
+                        key={player3.id} 
+                        player={player3} 
+                        turn={this.state.turn}
+                        nextTurn={this.state.next}
+                        onMakeTurn = {this.makeTurn}
+                        onCompleteTurn = {this.completeTurn}
+                    />
+                    </div>}
+                    <div></div>
+                </div>
+            </div>
+
+
+
+
             {this.state.gameOver && <TestRouteComponent players={this.state.players}/>}
 
-            <button onClick = {() => this.handleEndRound()}>END ROUND</button>
-
             {this.state.roundStatus ? <EndComponent players={this.state.players} gameOver={this.state.gameOver} onStart={this.startNewGame} onClose={this.toggleEndComponent}/> : null}
-            {this.state.modal ? <PopUp onColor={this.ChooseColor} onClose={this.toggleModal}/> : null}
-
-            {this.state.players.map(player=>
-                <Player 
-                key={player.id} 
-                player={player} 
-                turn={this.state.turn}
-                nextTurn={this.state.next}
-                onMakeTurn = {this.makeTurn}
-                onCompleteTurn = {this.completeTurn}
-                />
-                )}
-
-            <button onClick = {() => this.startNewGame()}>Start the GAME</button>
-                
-            <button onClick = {() => this.grabCardFromDesk()}>Grab a card from the desk</button>
-            
+                 
             <div className="playerBoard">
                 </div>
-                        <Fragment>
-                            <p>Main Card: </p>
-                            {this.state.mainCard!=null && <div className={`card ${this.state.mainCard.color}`}>{this.state.mainCard.value}</div>}
-                        </Fragment>
+                        
                 </div>
         }
         </PlayerContext.Consumer>

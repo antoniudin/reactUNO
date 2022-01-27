@@ -64,15 +64,50 @@ code {
 
 }
 
+/* ============================================ */
+
+.playerBoard {
+  margin-top: 25px;
+  margin-left: 25%;
+  /* border: 2px solid green */
+}
+
 .playerCards {
   display: grid;
   margin-top: 5%;
-  margin-left: 25%;
+  /* margin-left: 25%; */
   width:350px;
   grid-template-columns: repeat(7, 1fr);
   row-gap: 10px;
-  border: 2px solid red;
+  /* border: 2px solid red; */
 }
+
+.noActive, .mainCard {
+  color:white;
+  font-weight: bold;
+}
+
+.mainCard {
+  margin-top: 10px;
+}
+
+.active {
+  padding: 5px;
+  width:max-content;
+  border-radius: 10px;
+  color:white;  
+  font-weight: bold;
+  background: darkorange;
+}
+
+.scoreTitle {
+  margin-top: 2px;
+  margin-bottom: 2px;
+  color:white;
+  font-weight: bold;
+}
+
+/* ============================================ */
 
 .u_d {
   top: 0;
@@ -80,6 +115,11 @@ code {
   position: absolute;
   /* border: 1px solid green; */
   transform: rotate(180deg);
+}
+
+.W {
+  background-color:white;
+  color:black;
 }
 
 .yellow {
@@ -102,32 +142,52 @@ code {
   color:white;
 }
 
-.playerBoard {
+/* .playerBoard {
   display: grid;
   grid-template-columns: 250px 250px 250px;
+} */
+
+.colorCards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
-.playerCardBoard {
+.textwhite {
+  color: white;
+}
+
+.modal, .modal_holder {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 5px;
+  width: 250px;
+  border-radius: 10px;
+  background-color:darkred;
+  padding:5px;
+  font-weight: bolder;
+  color:white;
+}
+
+.testContainer {
+  background-color: red;
+  height: 200px;
+  margin-top: 10px;
+}
+
+.testScroll {
+  height:440px;
+	width:215px;
+  overflow-y:auto;
+	float:left;
+	position:relative;
+  background-color: darkorchid;
 }
 
 
 
-.textblack {
-  color:black;
-}
-
-.textgreen {
-  color:green;
-}
-
-.modal {
-  position: absolute;
-  width: 200px;
-  height:  100px;
-  background-color: hotpink;
-}
 
 .navBar {
   background-color:darkred;
