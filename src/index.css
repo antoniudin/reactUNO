@@ -24,6 +24,27 @@ code {
 }
 
 
+.gameOver, .finalScore, .startGameButton {
+  display: grid;
+  place-items: center;
+  background-color: black;
+  color: white;
+  font-size: larger;
+  font-weight: bold;
+}
+
+.gameOver {
+  height: 100vh;
+}
+
+.startGameButton {
+  width: 300px;
+  height: 60px;
+  border:0;
+  border-radius: 10px;
+  background-color: darkred;
+}
+
 
 .mdl {
   top:1px;
