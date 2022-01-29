@@ -95,12 +95,10 @@ code {
 
 .playerCards {
   display: grid;
-  margin-top: 5%;
-  /* margin-left: 25%; */
+  margin-top: 2%;
   width:350px;
   grid-template-columns: repeat(7, 1fr);
   row-gap: 10px;
-  /* border: 2px solid red; */
 }
 
 .noActive, .mainCard {
@@ -183,31 +181,44 @@ code {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 5px;
-  width: 250px;
-  border-radius: 10px;
+  width: 270px;
   background-color:darkred;
-  padding:5px;
-  font-weight: bolder;
-  color:white;
 }
 
-.testContainer {
-  background-color: red;
-  height: 200px;
+.modal_holder {
+  width: auto;
+  height: auto;
+  border: 1px solid green;
+}
+
+.middleRed {
+
+}
+
+.uno {
   margin-top: 10px;
 }
 
-.testScroll {
-  height:440px;
-	width:215px;
+.mainCardTitle {
+  margin-bottom: 10px;
+}
+
+.messageBox {
+  height:auto;
+	width:270px;
   overflow-y:auto;
 	float:left;
 	position:relative;
-  background-color: darkorchid;
+  background-color:brown;
 }
 
+.message {
+  color:white;
+}
 
+.messageExpired {
+  color:grey;
+}
 
 
 .navBar {
