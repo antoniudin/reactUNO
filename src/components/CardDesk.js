@@ -16,7 +16,7 @@ class CardDesk extends React.Component {
     gameOver: false,
     roundStatus: false,
     modal:false,        
-    message:'" press start to start the game "',
+    messageBox:['press the button to start the game'],
     cards: [],
     mainCard: null,
     forward: true,
@@ -39,8 +39,9 @@ class CardDesk extends React.Component {
     
     startNewGame = () => {
         const desk = FillDesk(); 
-        const message = `" Player ${this.state.turn} is making his turn "`;
-        this.setState({desk,message})
+        const messageBox = this.state.messageBox;
+        messageBox.unshift(`Player ${this.state.turn} is making a turn`)
+        this.setState({desk,messageBox})
         this.state.players.map((i)=> this.clearPlayersHand(i.id));
         this.initiateMainCard();
         const amountOfCards = 5;
@@ -112,7 +113,9 @@ class CardDesk extends React.Component {
     }    
 
     handleSkipCard = (cardId) => {
-        console.log(`Player ${this.state.nextTurn} is skipping his turn!`);
+        const messageBox = this.state.messageBox;
+        messageBox.unshift(`Player ${this.state.nextTurn} is skipping his turn!`)
+        this.setState({messageBox})
         this.forceCompleteTurn(this.state.nextTurn)
     }
 
@@ -248,8 +251,7 @@ class CardDesk extends React.Component {
             if (!player.desk) {
                 player.desk = true;
                 this.handleCardToPlayer(this.state.turn, 1)
-            } else console.log('You got one!');
-            
+            } else console.log('You got one!');   
         }
 
        ChooseColor = (color) => {
@@ -263,7 +265,6 @@ class CardDesk extends React.Component {
         const player1 = this.state.players.find(player=> player.id==1)
         const player2 = this.state.players.find(player=> player.id==2)
         const player3 = this.state.players.find(player=> player.id==3)
-
         return (
         <PlayerContext.Consumer>
             {PlayerContext => <div> 
@@ -280,16 +281,19 @@ class CardDesk extends React.Component {
                         onCompleteTurn = {this.completeTurn}
                     />}
                     </div>
-                    <div>
-                    {this.state.mainCard!=null && <div className="mainCard">Main Card: 
-                        <div className={`card ${this.state.mainCard.color}`}>{this.state.mainCard.value}</div>
-                        <button onClick = {() => this.grabCardFromDesk()}>Grab a card</button>
-                        <button onClick = {() => this.handleEndRound()}>END ROUND</button>
-                        </div>}
-                        
+                    <div className="middleRed">
                         <div className="modal_holder">
+                            <img className="uno" src={require('../img/uno.png')} />
+                    
+                            {this.state.mainCard!=null && <div className="mainCard">
+                            <div className="mainCardTitle">Main Card:</div>
+                            <div className={`card ${this.state.mainCard.color}`}>{this.state.mainCard.value}</div>
+                            <button onClick = {() => this.grabCardFromDesk()}>Grab a card</button>
+                            <button onClick = {() => this.handleEndRound()}>END ROUND</button>
+                            </div>}
+                        
                             {this.state.modal ? <PopUp onColor={this.ChooseColor} onClose={this.toggleModal}/> : null}
-                            {this.state.message}
+
                             {this.state.mainCard==null && <button onClick = {() => this.startNewGame()}>Start the GAME</button>}
                         </div>
                         
@@ -306,7 +310,13 @@ class CardDesk extends React.Component {
                     </div>}
                 </div>
                 <div className="bottom">
-                    <div></div>
+                    <div className="leftBottomCorner">
+                    <div className="messageBox">
+                            {this.state.messageBox.map(message=>
+                                <div className={this.state.messageBox.indexOf(message)==0 ? 'message' : 'messageExpired'}>{message}</div>
+                                )}
+                            </div>
+                    </div>
                     {this.state.mainCard!=null && <div>
                     <Player 
                         key={player3.id} 
@@ -320,9 +330,6 @@ class CardDesk extends React.Component {
                     <div></div>
                 </div>
             </div>
-
-
-
 
             {this.state.gameOver && <TestRouteComponent players={this.state.players}/>}
 

@@ -13,17 +13,6 @@ class HomePage extends Component {
         return (
             <div>Home Page</div>
             
-            
-            
-            // <div className="homePage">        
-            // <Link to="/desk">
-            // <img className="logo" src={require('./start.png')} />
-            // </Link>
-
-            // <Link to="/game">
-            // <p>ANOTHER LINK</p>
-            // </Link>
-            // </div>
         );
     }
 }

@@ -6,7 +6,7 @@ class Player extends Component {
             <div className="playerBoard">
                 <div className={(turn===player.id ? 'active' : 'noActive')}>{player.name}</div>
                  <div className="scoreTitle">Score: {player.score}</div>
-                 {mainCard!= null && <button onClick={onCompleteTurn.bind(this, player.id)}>Skip my turn</button>}
+                 <button onClick={onCompleteTurn.bind(this, player.id)}>Skip my turn</button>
 
                  <div className="playerCards">
                  {player.cards.map(card=>

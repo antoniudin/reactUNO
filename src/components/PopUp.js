@@ -17,7 +17,7 @@ render() {
   const {onClose, onChooseColor} = this.props;
   return (
    <div className="modal">
-      <header className="">Player is choosing a color</header>
+      {/* <header className="">Player is choosing a color</header> */}
       <div className="colorCards">
         <div onClick={()=> this.handleChooseColor('yellow')} className="card yellow"></div>
         <div onClick={()=> this.handleChooseColor('green')} className="card green"></div>
