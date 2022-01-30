@@ -1,6 +1,6 @@
-import React, { Component, Fragment } from 'react';
-import {BrowserRouter, Route, Routes} from 'react-router-dom';
-import useScoreCounting from '../hooks/useScoreCounting';
+import React from 'react';
+// import {BrowserRouter, Route, Routes} from 'react-router-dom';
+// import useScoreCounting from '../hooks/useScoreCounting';
 import Score from './Score';
 import Player from './Player';
 import PopUp from './PopUp';

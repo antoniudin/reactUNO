@@ -1,7 +1,6 @@
 import React from 'react';
 
 export default function FillCards(colors) {
-    // const colors = ['yellow', 'blue', 'red', 'green','yellow', 'blue', 'red', 'green']
     const values = ['0','1','2','3','4','5','6','7','8','9','S','+2','W','+4']
     let index = 1;
     let cards = []

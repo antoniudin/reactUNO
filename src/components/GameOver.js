@@ -10,7 +10,11 @@ export default function GameOver() {
                 {playerContext.players.map(player=> 
                 <p key={player.id}>{player.name} <span>Score:</span> {player.score}</p>
               )}   
+            
+            <div>
             <Link to="/desk"><button className="startGameButton">Start new game</button></Link>
+            <Link to="/"><button className="startGameButton">Home Page</button></Link>
+            </div>
           </div>
     </div>;
 }

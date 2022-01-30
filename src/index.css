@@ -45,20 +45,6 @@ code {
   background-color: darkred;
 }
 
-
-.mdl {
-  top:1px;
-  left:2px;
-  width: 40px;
-  height: 60px;
-  text-align: center;
-  vertical-align: middle;
-  line-height: 60px;
-  font-size:x-large;
-  /* border: 1px solid red; */
-  position: absolute;
-}
-
 .gameBoard {
   display: grid;
   height: 100vh;
@@ -128,31 +114,23 @@ code {
 
 /* ============================================ */
 
-.u_d {
-  top: 0;
-  left: 0;
-  position: absolute;
-  /* border: 1px solid green; */
-  transform: rotate(180deg);
-}
-
 .W {
   background-color:white;
   color:black;
 }
 
 .yellow {
-  background-color:yellow;
+  background-color:#ffef32;
   color:black;
 }
 
 .red {
-  background-color: red;
+  background-color:#dd2121;
   color:white;
 }
 
 .blue {
-  background-color: blue;
+  background-color: #2c29f2;
   color:white;
 }
 
@@ -187,8 +165,8 @@ code {
 
 .modal_holder {
   width: auto;
-  height: auto;
-  border: 1px solid green;
+  height: 100vh;
+  /* border: 1px solid green; */
 }
 
 .middleRed {
@@ -198,6 +176,7 @@ code {
 .uno {
   margin-top: 10px;
 }
+
 
 .mainCardTitle {
   margin-bottom: 10px;
@@ -249,13 +228,106 @@ transform: translate(-50%, -50%);
 }
 
 .oval {
-  top:-5px;
+  top:-2px;
   left:-9px;
-  width: 52px;
-  height: 30px;
-  border: 3px solid white;
+  width: 53px;
+  height: 26px;
+  border: 2px solid white;
   /* background: red; */
-  border-radius: 26px / 19px;
-  transform: rotate(-55deg);
+  border-radius: 26px / 16px;
+  transform: rotate(-52deg);
   position:relative;
 }
+
+
+/* ---------------------------------- */
+/* Fancy card design */
+
+
+.u_d {
+  margin-top: -4px;
+  margin-right: 2px;
+  top: 0;
+  left: 0;
+  position: sticky;
+  /* border: 1px solid green; */
+  transform: rotate(180deg);
+  color:white;
+}
+
+.unoCard {
+  padding-left:1px;
+  font-size: smaller;
+  /* background-color: darkred; */
+  color:white;
+}
+
+.newCard {
+  width: 40px;
+  height: 60px;
+  border-radius: 10px;
+  border: 2px solid white;
+  font-weight: bold;
+  position: relative;
+}
+
+.mdl, .mdl2 {
+  top:-3px;
+  left:2px;
+  width: 40px;
+  height: 60px;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 60px;
+  font-size:x-large;
+  /* border: 1px solid red; */
+  position: absolute;
+  color:black;
+}
+
+.mdl2 {
+  top:-2px;
+  left: 0px;
+  color:white;
+}
+
+.mdl:hover {
+  cursor: pointer;
+}
+
+.mdl2:hover {
+  cursor: pointer;
+}
+
+.back {
+  display: flex;
+  flex-direction: row;
+  background-color: darkred;
+}
+
+
+/* ============================== */
+/* Wild cards design  */
+
+.wildcard {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+}
+
+.w_blue {
+  background-color: blue;
+}
+.w_red {
+  background-color: red;
+}
+.w_green {
+  background-color: green;
+}
+.w_yellow {
+  background-color: yellow;
+}
+
+
+
+/* ============================== */

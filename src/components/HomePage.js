@@ -11,8 +11,22 @@ class HomePage extends Component {
     
     render() { 
         return (
-            <div>Home Page</div>
-            
+            <div className='back'>
+                <NavBar/>
+                Home Page
+                
+                <div></div>
+                <div className="newCard wildcard">
+                    <div className='w_blue'></div>
+                    <div className='w_red'></div>
+                    <div className='w_yellow'></div>
+                    <div className='w_green'></div>
+                </div>
+
+                
+
+
+            </div>
         );
     }
 }

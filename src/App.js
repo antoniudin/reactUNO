@@ -18,8 +18,7 @@ class App extends Component {
   handleUpdateScore = (updatedPlayers) => {
     this.setState({players: updatedPlayers})
   }
-
-
+  
   render() {
     return (
       <PlayerContext.Provider value={{
