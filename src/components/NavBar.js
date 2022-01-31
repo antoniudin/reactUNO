@@ -1,14 +1,16 @@
-import React, { Component } from 'react';
+import React, {useEffect, useState} from 'react';
+import RedirectComponent from './RedirectComponent';
+import TestRouteComponent from './RedirectComponent';
 
-class NavBar extends Component {
-    render() { 
-        return (
-            <div className="navBar">
-                <div>one</div>
-                <div>two</div>
-            </div>
-        );
-    }
+export default function NavBar() {
+        const [data, setData] = useState(null)
+  return <div className='navBar'>
+        {data!=null && <RedirectComponent path={data}/>}
+        <div className="navButton">
+            <img onClick = {()=> setData('game')} src={require('../img/play.png')} />
+        </div>
+        <div className="navButton">
+            <img onClick = {()=> setData('about')} src={require('../img/about.png')} />
+        </div>
+  </div>;
 }
- 
-export default NavBar;
