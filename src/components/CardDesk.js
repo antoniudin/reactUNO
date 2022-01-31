@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import Score from './Score';
 import Player from './Player';
 import PopUp from './PopUp';
@@ -21,7 +21,7 @@ class CardDesk extends React.Component {
     turn: 1,
     nextTurn: 2,
     desk: [],
-    colors : ['yellow', 'blue', 'red', 'green'],
+    colors : ['yellow', 'blue', 'red', 'green','yellow', 'blue', 'red', 'green'],
     players: [
         {id: 1, name: "Player 1", turn: true, score: 0, cards:[],desk:false},
         {id: 2, name: "Player 2", turn: false, score: 0, cards:[],desk:false},
@@ -43,7 +43,7 @@ class CardDesk extends React.Component {
 
     startNewGame = () => {
         const desk = FillDesk(); 
-        this.handleMessage(`Player ${this.state.turn} is making a turn`)
+        this.handleMessage(`player ${this.state.turn} is making a turn`)
         this.setState({desk})
         this.state.players.map((i)=> this.clearPlayersHand(i.id));
         this.initiateMainCard();
@@ -74,11 +74,11 @@ class CardDesk extends React.Component {
     makeTurn = (playerId, cardId) => {
         const currentCard = this.state.cards.find(card=> card.id===cardId)
         if (playerId===this.state.turn) {
-            this.handleMessage(`Player ${playerId} used ${currentCard.value} ${currentCard.color}`)
-            this.handleMessage(`Player ${this.state.nextTurn} is making a turn`)
+            this.handleMessage(`player ${playerId} used ${currentCard.value} ${currentCard.color}`)
+            this.handleMessage(`player ${this.state.nextTurn} is making a turn`)
             this.compareTwoCards(cardId, playerId)
         }
-        else this.handleMessage("Sorry! It's not your turn yet")
+        else this.handleMessage("sorry! you can't do it")
     }
 
     compareTwoCards = (cardId, playerId) => {
@@ -88,7 +88,6 @@ class CardDesk extends React.Component {
             this.removeCardFromPlayerBoard(cardId, playerId)
             this.completeTurn(playerId);
             this.checkSpecialCards(cardId);
-            this.handleMessage(`Player ${this.state.turn} is making a turn`)
             return true;
         } return false;
     }
@@ -102,13 +101,13 @@ class CardDesk extends React.Component {
 
     handleFourCard = (cardId) => {
         this.toggleModal();
-        this.handleMessage(`Player ${this.state.nextTurn} is taking 4 CARDS!!!`);
+        this.handleMessage(`player ${this.state.nextTurn} is taking 4 cards!`);
         this.handleCardToPlayer(this.state.nextTurn, 4)
         this.forceCompleteTurn(this.state.nextTurn)
     }
 
     handleWildCard = (cardId) => {
-        this.handleMessage(`Wild card! Player ${this.state.turn} is choosing a color`);
+        this.handleMessage(`wild card! player ${this.state.turn} is choosing a color`);
         this.toggleModal();
     }
 
@@ -118,9 +117,7 @@ class CardDesk extends React.Component {
     }    
 
     handleSkipCard = (cardId) => {
-        const messageBox = this.state.messageBox;
-        messageBox.unshift(`Player ${this.state.nextTurn} is skipping his turn!`)
-        this.setState({messageBox})
+        this.handleMessage(`player ${this.state.nextTurn} is skipping his turn!`)
         this.forceCompleteTurn(this.state.nextTurn)
     }
 
@@ -144,7 +141,7 @@ class CardDesk extends React.Component {
 
     handleEndRound = () => {
         //Transfer all the console.log messages to the GameLogComponent
-        this.handleMessage('The round is over')
+        this.handleMessage('round is over')
         //count the score than strat the round or call handleEndGame method
         const players = this.state.players;
         let gameOver = false;
@@ -158,8 +155,9 @@ class CardDesk extends React.Component {
     }
     
     completeTurn = (playerId) => {
-        if (playerId!=this.state.turn) this.handleMessage("Sorry, It's not your turn yet!")
+        if (playerId!=this.state.turn || this.state.modal) this.handleMessage("sorry, you can't do it")
         else {
+            this.handleMessage(`player ${playerId} skiped his turn`)
             const player = this.state.players.find(player=> player.id===playerId)
             player.desk=false
             if (this.state.forward) this.makeForwardTurn(playerId);
@@ -213,21 +211,17 @@ class CardDesk extends React.Component {
             counter++;
             this.setState({player})
         }
-        console.log(this.state.players)
     }
 
     takeCardFromDesk = () => {
         const desk = this.state.desk;
         //get a random card from the desk
         const card = desk[Math.floor(Math.random()*desk.length)]
-        console.log(`random card: ${card}`);
         //find out the index of random card and remove it from desk
         const cardIndex = desk.indexOf(card)
-        console.log(`card index: ${cardIndex}`);
         desk.splice(cardIndex,1);
         //find out the card and update the desk
         const currentCard = this.state.cards.find(c => c.id===card);
-        console.log(`currentCard: ${currentCard.id}`);
         this.setState({desk})
         return currentCard;
     }
@@ -238,22 +232,23 @@ class CardDesk extends React.Component {
         });
        }
 
-    toggleEndComponent = () => {
-        this.setState({
-            roundStatus: !this.state.roundStatus
-           });
-    }
+    // toggleEndComponent = () => {
+    //     this.setState({
+    //         roundStatus: !this.state.roundStatus
+    //        });
+    // }
 
         grabCardFromDesk = () =>{
             const player = this.state.players.find(player => player.id===this.state.turn)
             if (!player.desk) {
                 player.desk = true;
                 this.handleCardToPlayer(this.state.turn, 1)
-            } else console.log('You got one!');   
+                this.handleMessage(`player ${this.state.turn} took a card`)
+            } else this.handleMessage('you have already got one!');   
         }
 
        ChooseColor = (color) => {
-        this.handleMessage(`${color} was choosed`);
+        this.handleMessage(`${color} color was choosed`);
         const mainCard = this.state.mainCard;
         mainCard.color=color;
         this.setState({mainCard})
@@ -265,7 +260,7 @@ class CardDesk extends React.Component {
         const player3 = this.state.players.find(player=> player.id==3)
         return (
         <PlayerContext.Consumer>
-            {PlayerContext => <div> 
+            {PlayerContext => <Fragment> 
 
             <div className="gameBoard">
                 <div className="upper">
@@ -284,22 +279,36 @@ class CardDesk extends React.Component {
                             <img className="uno" src={require('../img/uno.png')} />
                     
                             {this.state.mainCard!=null && <div className="mainCard">
-                            <div className="mainCardTitle">Main Card:</div>
-                            <div className={`card ${this.state.mainCard.color}`}>{this.state.mainCard.value}</div>
-                            <button onClick = {() => this.grabCardFromDesk()}>Grab a card</button>
-                            <button onClick = {() => this.handleEndRound()}>END ROUND</button>
-                            {this.state.forward ? <div>clockwise
-                                <img src={require('../img/right.png')}/>
-                            </div> : <div>counterclockwise
-                            <img src={require('../img/left.png')}/>
-                                </div>}
+                            <div className="mainCardPileBox">
+                                <div className={`newCard unoCard ${this.state.mainCard.color}`}>
+                                    {this.state.mainCard.value}
+                                        <div className='oval'></div>
+                                <div className='mdl'>{this.state.mainCard.value}</div>
+                                <div className='mdl2'>{this.state.mainCard.value}</div>
+                                <div className='u_d'>{this.state.mainCard.value}</div>
+                            </div>
+                            
+                            <div title='click to grab a card' onClick = {() => this.grabCardFromDesk()} className='pile newCard red'>
+                                <img className="angle" src={require('../img/unoCardBack.png')} />
+                            </div>
+                            </div>
+                            
+                            <div className="direction">Game direction:</div>
+                            {this.state.forward ? <div className="direction">clockwise</div> : <div className="direction">counterclockwise</div>}
                             </div>}
 
+                         
                             
                             
                             {this.state.modal ? <PopUp onColor={this.ChooseColor} onClose={this.toggleModal}/> : null}
 
                             {this.state.mainCard==null && <button onClick = {() => this.startNewGame()}>Start the GAME</button>}
+                            
+                            <div className="messageBox">
+                            {this.state.messageBox.map(message=>
+                                <div className={this.state.messageBox.indexOf(message)==0 ? 'message' : 'messageExpired'}>{message}</div>
+                                )}
+                            </div>
                         </div>
                         
                     </div>
@@ -316,11 +325,8 @@ class CardDesk extends React.Component {
                 </div>
                 <div className="bottom">
                     <div className="leftBottomCorner">
-                    <div className="messageBox">
-                            {this.state.messageBox.map(message=>
-                                <div className={this.state.messageBox.indexOf(message)==0 ? 'message' : 'messageExpired'}>{message}</div>
-                                )}
-                            </div>
+                    <button onClick = {() => this.handleEndRound()}>END ROUND</button>
+                    
                     </div>
                     {this.state.mainCard!=null && <div>
                     <Player 
@@ -331,7 +337,7 @@ class CardDesk extends React.Component {
                         onMakeTurn = {this.makeTurn}
                         onCompleteTurn = {this.completeTurn}
                     />
-                    </div>}
+                        </div>}
                     <div></div>
                 </div>
             </div>
@@ -343,7 +349,7 @@ class CardDesk extends React.Component {
             <div className="playerBoard">
                 </div>
                         
-                </div>
+                </Fragment>
         }
         </PlayerContext.Consumer>
         )
