@@ -13,8 +13,6 @@ code {
 }
 
 .card {
-  /* width: 30px;
-  height: 50px; */
   width: 40px;
   height: 60px;
   border-radius: 10px;
@@ -47,8 +45,11 @@ code {
 
 .gameBoard {
   display: grid;
-  height: 100vh;
+  min-height: 100vh;
+  min-width: 1400px;
   grid-template-rows: 50% 50%;
+  bottom:0;
+  position: fixed;
 }
 
 .upper {
@@ -76,7 +77,6 @@ code {
 .playerBoard {
   margin-top: 25px;
   margin-left: 25%;
-  /* border: 2px solid green */
 }
 
 .playerCards {
@@ -93,7 +93,19 @@ code {
 }
 
 .mainCard {
-  margin-top: 10px;
+  margin-top: 20px;
+}
+
+.pile {
+  margin-left:10px;
+}
+
+.mainCardPileBox {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
 }
 
 .active {
@@ -103,6 +115,10 @@ code {
   color:white;  
   font-weight: bold;
   background: darkorange;
+}
+
+.direction {
+  text-align: center;
 }
 
 .scoreTitle {
@@ -115,7 +131,7 @@ code {
 /* ============================================ */
 
 .W {
-  background-color:white;
+  background-image: linear-gradient(to right, red,orange,yellow,green,blue);
   color:black;
 }
 
@@ -159,54 +175,71 @@ code {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 270px;
-  background-color:darkred;
+  width: 300px;
+  background-color:brown;
 }
 
 .modal_holder {
-  width: auto;
+  width: 350px;
   height: 100vh;
-  /* border: 1px solid green; */
-}
-
-.middleRed {
-
+  align-items: center;
 }
 
 .uno {
-  margin-top: 10px;
+  margin-top: 20px;
 }
 
+.startButton {
+  width: 130px;
+  height: 41px;
+  background-image:url('../src/img/start.png');
+  position: absolute;
+  bottom: 50%;
+  left: 45%;
+}
+
+.middleRed {
+  
+}
 
 .mainCardTitle {
   margin-bottom: 10px;
 }
 
 .messageBox {
-  height:auto;
-	width:270px;
+  bottom:2px;
+  width: 350px;
+  height:3em;
   overflow-y:auto;
 	float:left;
-	position:relative;
-  background-color:brown;
+	position:fixed;
+  background-color:darkred;
+  padding:3px;
+  border-radius: 5px;
 }
 
 .message {
   color:white;
+  font-weight:bold;
 }
 
 .messageExpired {
-  color:grey;
+  color:rgba(255, 255, 255, 0.879);
+  font-weight:normal;
 }
 
+.navButton {
+  margin-right: 40px;
+}
 
 .navBar {
-  background-color:darkred;
+  display: flex;
+  flex-direction: row;
 }
 
 .homePage {
   display: grid;
-  grid-template-columns: 50% 50%;
+  place-items: center;
   background-color: black;
   height: 100vh;
 }
@@ -233,12 +266,17 @@ transform: translate(-50%, -50%);
   width: 53px;
   height: 26px;
   border: 2px solid white;
-  /* background: red; */
   border-radius: 26px / 16px;
   transform: rotate(-52deg);
   position:relative;
 }
 
+.angle {
+  top:22px;
+  left: 2px;
+  transform: rotate(-40deg);
+  position:absolute;
+}
 
 /* ---------------------------------- */
 /* Fancy card design */
@@ -291,11 +329,11 @@ transform: translate(-50%, -50%);
   color:white;
 }
 
-.mdl:hover {
+.mdl:hover, .mdl2:hover, .W:hover, .newCard:hover, .startButton:hover {
   cursor: pointer;
 }
 
-.mdl2:hover {
+.yellow:hover, .red:hover, .green:hover, .blue:hover, .navButton {
   cursor: pointer;
 }
 
@@ -309,25 +347,12 @@ transform: translate(-50%, -50%);
 /* ============================== */
 /* Wild cards design  */
 
-.wildcard {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
+.wildcard { 
+  background-image: linear-gradient(to right, red,orange,yellow,green,blue);
 }
 
-.w_blue {
-  background-color: blue;
+.testBtn {
+  
 }
-.w_red {
-  background-color: red;
-}
-.w_green {
-  background-color: green;
-}
-.w_yellow {
-  background-color: yellow;
-}
-
-
 
 /* ============================== */

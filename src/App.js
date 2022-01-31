@@ -26,10 +26,9 @@ class App extends Component {
         onUpdate: this.handleUpdateScore}}
         >
           <Routes>
-            <Route path="/desk" exact element={<CardDesk/>}/>
-            <Route path="/" element={<HomePage/>}/>
+            <Route path="/game" exact element={<CardDesk/>}/>
             <Route path="/gameover" element={<GameOver/>}/>
-            <Route path="/roundover" element={<RoundOver/>}/>
+            <Route path="/" element={<HomePage/>}/>
           </Routes>
       </PlayerContext.Provider>
     )

@@ -9,12 +9,12 @@ export default function FillCards(colors) {
             const card = {id:index, color:color,value:values[i]}
             cards.push(card)
             index++;
-            cards.push(card)
-            index++;
             if (card.value=='W' || card.value=='+4' ) card.color="W";
         })
     }
-    cards.splice(-4);
-    cards.splice(4,4)
+    
+    cards.slice(0,4)
+    cards.slice(-4)
+    console.log(cards);
     return cards; 
 }
