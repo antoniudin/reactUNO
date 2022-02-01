@@ -1,10 +1,8 @@
 import React, { Component } from 'react'
-import GameLog from './components/GameLog'
 import PlayerContext from './context/PlayerContext'
 import CardDesk from './components/CardDesk'
 import HomePage from './components/HomePage'
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
-import RoundOver from './components/RoundOver'
 import GameOver from './components/GameOver'
 
 class App extends Component {
@@ -18,12 +16,14 @@ class App extends Component {
   handleUpdateScore = (updatedPlayers) => {
     this.setState({players: updatedPlayers})
   }
+
+  test = () => {
+    console.log("first");
+  }
   
   render() {
     return (
-      <PlayerContext.Provider value={{
-        players: this.state.players, 
-        onUpdate: this.handleUpdateScore}}
+      <PlayerContext.Provider value={{players: this.state.players, onUpdate: this.handleUpdateScore, test: this.test}}
         >
           <Routes>
             <Route path="/game" exact element={<CardDesk/>}/>
