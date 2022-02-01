@@ -1,19 +1,21 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect, useNavigate } from 'react';
 import PlayerContext from '../context/PlayerContext';
-import { Link } from 'react-router-dom';
+import RedirectComponent from './RedirectComponent';
 
-export default function GameOver() {
+export default function GameOver(props) {
+  const [data, setData] = useState(null);
   const playerContext = useContext(PlayerContext)
-  return <div className="gameOver">
-            <div className="finalScore">
-              <img className="" src={require('../img/gameover.png')} />
+
+  return <div className='gameOver'>
+            {data!=null && <RedirectComponent path={data}/>}
+            <div className='finalScore'>
+              <img className='' src={require('../img/gameover.png')} />
                 {playerContext.players.map(player=> 
                 <p key={player.id}>{player.name} <span>Score:</span> {player.score}</p>
               )}   
-            
-            <div>
-            <Link to="/desk"><button className="startGameButton">Start new game</button></Link>
-            <Link to="/"><button className="startGameButton">Home Page</button></Link>
+            <div className='goButtonsContainer'>
+              <div className='gameOverHome' onClick = {()=> setData('')}></div>
+              <div className='gameOverPlay' onClick = {()=> setData('/game')}></div>
             </div>
           </div>
     </div>;

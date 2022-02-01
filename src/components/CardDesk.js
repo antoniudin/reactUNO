@@ -2,14 +2,13 @@ import React, {Fragment} from 'react';
 import Score from './Score';
 import Player from './Player';
 import PopUp from './PopUp';
-import EndComponent from './EndComponent';
 import FillDesk from './FillDesk';
 import FillCards from './FillCards';
 import RedirectComponent from './RedirectComponent';
 import PlayerContext from '../context/PlayerContext';
+import Card from './Card';
 
 class CardDesk extends React.Component {
-    
     state = {
     gameOver: false,
     roundStatus: false,
@@ -94,15 +93,14 @@ class CardDesk extends React.Component {
     }
 
     handleTwoCard = (cardId) => {
-        //Find the player who is going to take 2 Cards
-        this.handleMessage(`Player ${this.state.nextTurn} is taking 2 CARDS!`);
         this.handleCardToPlayer(this.state.nextTurn, 2)
+        this.handleMessage(`Player ${this.state.nextTurn} pick up 2 cards and forfeit his turn`);
         this.forceCompleteTurn(this.state.nextTurn)
     }
 
     handleFourCard = (cardId) => {
         this.toggleModal();
-        this.handleMessage(`player ${this.state.nextTurn} is taking 4 cards!`);
+        this.handleMessage(`player ${this.state.nextTurn} pick up 4 cards!`);
         this.handleMessage(`player ${this.state.turn} is choosing a color`);
         this.handleCardToPlayer(this.state.nextTurn, 4)
         this.forceCompleteTurn(this.state.nextTurn)
@@ -150,23 +148,22 @@ class CardDesk extends React.Component {
         let gameOver = false;
         players.map(function(player){
             player.score += Score(player.cards);
-            if (player.score>100) gameOver=true; 
+            if (player.score>100) {
+                gameOver=true; 
+            }
         })
         this.setState({players, gameOver})
         this.startNewGame();
-
     }
     
     completeTurn = (playerId) => {
         if (playerId!=this.state.turn || this.state.modal) this.handleMessage("sorry, you can't do it")
         else {
-            this.handleMessage(`player ${playerId} completed his turn`)
-            this.handleMessage(`player ${this.state.nextTurn} IS MAKING HIS TURN`)
             const player = this.state.players.find(player=> player.id===playerId)
             player.desk=false
             if (this.state.forward) this.makeForwardTurn(playerId);
             else this.makeBackwardTurn(playerId);
-        }
+        } 
         this.checkRoundIsOver(playerId);
     }
 
@@ -184,21 +181,20 @@ class CardDesk extends React.Component {
     }
 
     makeForwardTurn = (playerId) => {
+        
         let turn = playerId;
         if (playerId<3) turn++; else turn = 1;
-        this.setState({turn})
         let nextTurn=turn+1;
         if (nextTurn>3) nextTurn=1
-        this.setState({nextTurn})
+        this.setState({turn, nextTurn})
     }
 
     makeBackwardTurn = (playerId) => {
         let turn = playerId;
         if (playerId>1) turn--; else turn = 3;
-        this.setState({turn})
         let nextTurn=turn-1;
         if (nextTurn<1) nextTurn=3;
-        this.setState({nextTurn})
+        this.setState({turn, nextTurn})
     }
 
     changeDirection = () => {
@@ -238,16 +234,16 @@ class CardDesk extends React.Component {
 
         grabCardFromDesk = () =>{
             const player = this.state.players.find(player => player.id===this.state.turn)
-            if (!player.desk) {
+            if (!player.desk && !this.state.modal) {
                 player.desk = true;
                 this.handleCardToPlayer(this.state.turn, 1)
-                this.handleMessage(`player ${this.state.turn} took a card`)
-            } else this.handleMessage('you have already got one!');   
+                this.handleMessage(`player ${this.state.turn} picked up a card`)
+            } else this.handleMessage(`Sorry! You can't do that`);   
         }
 
        ChooseColor = (color) => {
         this.handleMessage(`${color} color was choosed`);
-        this.handleMessage(`player ${this.state.turn} is MaKiNG his turn`);
+        this.handleMessage(`player ${this.state.turn} is making a turn`);
         const mainCard = this.state.mainCard;
         mainCard.color=color;
         this.setState({mainCard})
@@ -260,9 +256,12 @@ class CardDesk extends React.Component {
             if (card.value===mainCard.value || card.color==mainCard.color || card.color=='W') console.log(card);
         })
         if (playersCards.length===0) console.log("I need a card from the desk");
-        // this.grabCardFromDesk(turn, 1)
-        //I am going to analize following parameters:
        }
+
+       updateContext = () => {
+           const m = PlayerContext.test();
+       }
+
 
     render() { 
         const {turn,mainCard, next, players, gameOver, roundStatus, forward, modal, messageBox} = this.state;
@@ -275,7 +274,7 @@ class CardDesk extends React.Component {
 
             <div className="gameBoard">
                 <div className="upper">
-                 <div>
+                 <div> 
                  {mainCard!=null && <Player 
                         key={player1.id} 
                         player={player1} 
@@ -294,21 +293,19 @@ class CardDesk extends React.Component {
                     
                             {mainCard!=null && <div className="mainCard">
                             <div className="mainCardPileBox">
-                                <div className={`newCard unoCard ${mainCard.color}`}>
-                                    {mainCard.value}
-                                        <div className='oval'></div>
-                                        <div className='mdl'>{mainCard.value}</div>
-                                <div className='mdl2'>{mainCard.value}</div>
-                                <div className='u_d'>{mainCard.value}</div>
-                            </div>
+                                <Card card={this.state.mainCard}/>
                             
                             <div title='click to grab a card' onClick = {() => this.grabCardFromDesk()} className='pile newCard red'>
                                 <img className="angle" src={require('../img/unoCardBack.png')} />
                             </div>
+                            
                             </div>
                             
                             <div className="direction">Game direction:</div>
-                            {forward ? <div className="direction">clockwise</div> : <div className="direction">counterclockwise</div>}
+                                <div className="direction active">{forward ? 'clockwise':'conterclockwise'}</div>
+                            
+                            
+                            
                             </div>}
 
                             {modal ? <PopUp onColor={this.ChooseColor} onClose={this.toggleModal}/> : null}
@@ -339,8 +336,6 @@ class CardDesk extends React.Component {
                     
                     <button onClick = {() => this.handleAI()}>run AI</button>
 
-
-
                     </div>
                     {mainCard!=null && <div>
                     <Player 
@@ -352,14 +347,18 @@ class CardDesk extends React.Component {
                         onCompleteTurn = {this.completeTurn}
                     />
                         </div>}
-                    <div></div>
+                    <div>
+                        {mainCard==null && <p className='message'>Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem 
+                        ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum
+                        Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum
+                        Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum
+                        Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum
+                        </p>}
+                    </div>
                 </div>
             </div>
 
             {gameOver && <RedirectComponent path={'gameover'} players={players}/>}
-
-            {roundStatus ? <EndComponent players={players} gameOver={gameOver} onStart={this.startNewGame} onClose={this.toggleEndComponent}/> : null}
-                        
                 </Fragment>
         }
         </PlayerContext.Consumer>
