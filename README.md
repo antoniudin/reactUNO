@@ -1,4 +1,5 @@
-## UNO GAME
+## React JS Uno
+![logo](/src/img/uno.png)
 
 Here is the first version of my React JS UNO project where I implemented the basic functionality of the famous game.
 
