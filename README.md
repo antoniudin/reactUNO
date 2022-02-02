@@ -10,7 +10,7 @@ If you face an issue or notice an error, I would like to hear about it.
 
 ###### What has been done so far:
 
-- [x]# Main game functions
+- [x] Main game functions
 - [x] Game log
 - [ ] Complete "say Uno" component
 - [ ] Automate gameplay for two players
