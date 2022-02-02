@@ -7,6 +7,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+a {
+  color:white;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
@@ -31,13 +35,29 @@ code {
   font-weight: bold;
 }
 
+.customButton {
+  width:max-content;
+  border:none;
+  border-radius: 5px;
+  background-color: grey;
+  font-size: medium;
+  /* font-weight: bold; */
+  padding:9px;
+  margin-right: 3px;
+  background-color: #e5e5e5;
+}
+
+.customButton:hover {
+  cursor: pointer;
+}
+
 .gameOver {
   height: 100vh;
 }
 
 .gameOverHome {
-  width:81px;
-  height: 25px;
+  width:113px;
+  height: 42px;
   background-image: url('/src/img/homePlain.png');
 }
 
@@ -47,8 +67,9 @@ code {
 }
 
 .gameOverPlay {
-  width:141px;
-  height: 25px;
+  width:194px;
+  height: 42px;
+  margin-top: 20px;
   background-image: url('/src/img/newGameEmpty.png');
 }
 
@@ -76,40 +97,11 @@ code {
 .goButtonsContainer {
   display: flex;
   flex-direction: row;
-  width:250px;
+  width:330px;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 30px;
 }
-
-/* .gameBoard {
-  display: grid;
-  min-height: 100vh;
-  min-width: 1400px;
-  grid-template-rows: 50% 50%;
-  bottom:0;
-  position: fixed;
-} */
-
-/* .upper {
-  display: grid;
-  grid-template-columns: 2fr 1fr 2fr;
-  grid-template-rows: 0;
-  background-color: brown;
-} */
-
-/* .bottom {
-  display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
-  grid-template-rows: 0;
-  background-color: black;
-  color: white;
-} */
-
-/* .experimantalPlayerBoard {
-  text-align: center;
-} */
-
-/* ============================================ */
 
 .playerBoard {
   margin-top: 25px;
@@ -158,6 +150,7 @@ code {
 .direction {
   width:auto;
   text-align: center;
+  margin-bottom: 10px;
 }
 
 .scoreTitle {
@@ -167,7 +160,6 @@ code {
   font-weight: bold;
 }
 
-/* ============================================ */
 
 .W {
   background-image: linear-gradient(to right, red,orange,yellow,green,blue);
@@ -275,10 +267,20 @@ code {
   flex-direction: row;
 }
 
+.center {
+  margin-top: -25%;
+  width:50%;
+  border-radius: 10px;
+  padding: 10px;
+}
+
 .homePage {
   display: grid;
   place-items: center;
   background-color: black;
+  color:white;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: x-large;
   height: 100vh;
 }
 
@@ -326,7 +328,6 @@ transform: translate(-50%, -50%);
   top: 0;
   left: 0;
   position: sticky;
-  /* border: 1px solid green; */
   transform: rotate(180deg);
   color:white;
 }
@@ -334,14 +335,13 @@ transform: translate(-50%, -50%);
 .unoCard {
   padding-left:1px;
   font-size: smaller;
-  /* background-color: darkred; */
   color:white;
 }
 
 .newCard {
   width: 40px;
   height: 60px;
-  border-radius: 10px;
+  border-radius: 7px;
   border: 2px solid white;
   font-weight: bold;
   position: relative;
