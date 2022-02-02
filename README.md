@@ -8,10 +8,10 @@ By now you manage all three players by hand, but I am making a plan to automate 
 
 If you face an issue or notice an error, I would like to hear about it.
 
-###### The Process:
+###### What has been done so far:
 
-- [x] Main game functions
-- [ ] Game log
+- [x]# Main game functions
+- [x] Game log
 - [ ] Complete "say Uno" component
 - [ ] Automate gameplay for two players
 - [ ] Add the ability to use your name and implement the table
