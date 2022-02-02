@@ -316,7 +316,11 @@ class CardDesk extends React.Component {
                         )}
                         </div>    
                     </div>}
+                    
+                    
+
                     {mainCard==null && <div className="startButton" onClick = {() => this.startNewGame()}></div>}
+                    
                 </Fragment>}
         </PlayerContext.Consumer>
             )

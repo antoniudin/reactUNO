@@ -2,6 +2,7 @@
 import React, { Component } from "react";
 
 export default class PopUp extends Component {
+  
   handleClose = () => {
    this.props.onClose();
   };
@@ -13,13 +14,13 @@ export default class PopUp extends Component {
 
 render() {
   const {onClose, onChooseColor} = this.props;
+  const colors = ['yellow','green', 'red', 'blue']
   return (
    <div className="modal">
       <div className="colorCards">
-        <div onClick={()=> this.handleChooseColor('yellow')} className="card yellow"></div>
-        <div onClick={()=> this.handleChooseColor('green')} className="card green"></div>
-        <div onClick={()=> this.handleChooseColor('red')} className="card red"></div>
-        <div onClick={()=> this.handleChooseColor('blue')} className="card blue"></div>
+        {colors.map(color=> 
+            <div key={color} onClick={()=> this.handleChooseColor(color)} className={`card ${color}`}></div>  
+          )}
       </div>
     </div>
   );
