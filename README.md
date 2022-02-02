@@ -8,7 +8,7 @@ By now you manage all three players by hand, but I am making a plan to automate 
 
 If you face an issue or notice an error, I would like to hear about it.
 
-###### What has been done so far:
+## What has been done so far:
 
 - [x] Main game functions
 - [x] Game log
@@ -18,7 +18,7 @@ If you face an issue or notice an error, I would like to hear about it.
 
 ![example](/assets/gameplay.png)
 
-###### Action Card Description
+## Action Card Description
 
 * **+2** - (Draw Two) – The next player will have to pick up two cards and forfeit his/her turn.
 * **R** - (Reverse) – If going clockwise, switch to counterclockwise or vice versa.
