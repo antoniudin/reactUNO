@@ -8,9 +8,9 @@ import GameOver from './components/GameOver'
 class App extends Component {
   state = {
     players: [
-      {id: 1, name: "Player 1", score: 0},
-      {id: 2, name: "Player 2", score: 0},
-      {id: 3, name: "Player 3", score: 0},
+        {id: 1, name: "Player 1", turn: true, score: 0, cards:[],desk:false},
+        {id: 2, name: "Player 2", turn: false, score: 0, cards:[],desk:false},
+        {id: 3, name: "Player 3", turn: false, score: 0, cards:[],desk:false},
   ]
 }
   handleUpdateScore = (updatedPlayers) => {
