@@ -17,6 +17,7 @@ render() {
   const colors = ['yellow','green', 'red', 'blue']
   return (
    <div className="modal">
+      <div className="direction">Choose a color:</div>
       <div className="colorCards">
         {colors.map(color=> 
             <div key={color} onClick={()=> this.handleChooseColor(color)} className={`card ${color}`}></div>  
