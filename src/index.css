@@ -75,34 +75,33 @@ code {
   align-items: center;
 }
 
-.gameBoard {
+/* .gameBoard {
   display: grid;
   min-height: 100vh;
   min-width: 1400px;
   grid-template-rows: 50% 50%;
   bottom:0;
   position: fixed;
-}
+} */
 
-.upper {
+/* .upper {
   display: grid;
   grid-template-columns: 2fr 1fr 2fr;
   grid-template-rows: 0;
   background-color: brown;
-}
+} */
 
-.bottom {
+/* .bottom {
   display: grid;
   grid-template-columns: 1fr 2fr 1fr;
   grid-template-rows: 0;
   background-color: black;
   color: white;
-}
+} */
 
-.experimantalPlayerBoard {
+/* .experimantalPlayerBoard {
   text-align: center;
-
-}
+} */
 
 /* ============================================ */
 
@@ -189,11 +188,6 @@ code {
   color:white;
 }
 
-/* .playerBoard {
-  display: grid;
-  grid-template-columns: 250px 250px 250px;
-} */
-
 .colorCards {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -203,20 +197,6 @@ code {
 
 .textwhite {
   color: white;
-}
-
-.modal, .modal_holder {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 300px;
-  background-color:brown;
-}
-
-.modal_holder {
-  width: 350px;
-  height: 100vh;
-  align-items: center;
 }
 
 .uno {
@@ -370,7 +350,6 @@ transform: translate(-50%, -50%);
   vertical-align: middle;
   line-height: 60px;
   font-size:x-large;
-  /* border: 1px solid red; */
   position: absolute;
   color:black;
 }
@@ -399,32 +378,33 @@ transform: translate(-50%, -50%);
   background-image: linear-gradient(to right, red,orange,yellow,green,blue);
 }
 
-
-/* =================== */
-/* UNO BUBBLE */
-
-.bubble {
-  position: relative;
-  font-family: sans-serif;
-  font-size: 18px;
-  line-height: 24px;
-  width: 100px;
-  background: #fff;
-  border-radius: 40px;
-  padding: 24px;
-  text-align: center;
-  color: #000;
+.Board {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1.5fr;
+  grid-template-rows: 1fr 1fr;
+  height: 100vh;
+  background-color: black;
+  color:white;
 }
 
-.bubble-bottom-left:before {
-  content: "";
-  width: 0px;
-  height: 0px;
-  position: absolute;
-  border-left: 24px solid #fff;
-  border-right: 12px solid transparent;
-  border-top: 12px solid #fff;
-  border-bottom: 20px solid transparent;
-  left: 32px;
-  bottom: -24px;
+.Inner:nth-child(even) {
+  visibility: hidden;
+  background-color: black;
+}
+
+.Inner:nth-child(2) {
+  visibility: visible;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color:brown;
+}
+
+.Inner:nth-child(odd) {
+  background-color: brown;
+}
+
+.Inner:nth-child(5) {
+  margin-left: -25%;
+  background-color: black;
 }
