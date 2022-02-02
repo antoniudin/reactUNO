@@ -262,109 +262,56 @@ class CardDesk extends React.Component {
            const m = PlayerContext.test();
        }
 
-
     render() { 
         const {turn,mainCard, next, players, gameOver, roundStatus, forward, modal, messageBox} = this.state;
-        const player1 = players.find(player=> player.id==1)
-        const player2 = players.find(player=> player.id==2)
-        const player3 = players.find(player=> player.id==3)
         return (
         <PlayerContext.Consumer>
-            {PlayerContext => <Fragment> 
-
-            <div className="gameBoard">
-                <div className="upper">
-                 <div> 
-                 {mainCard!=null && <Player 
-                        key={player1.id} 
-                        player={player1} 
-                        turn={turn}
-                        nextTurn={next}
-                        onMakeTurn = {this.makeTurn}
-                        onCompleteTurn = {this.completeTurn}
-                    />}
-                    </div>
-                    <div className="middleRed">
-                    
-                    {mainCard==null && <div className="startButton" onClick = {() => this.startNewGame()}></div>}
-
-                    <div className="modal_holder">
-                        {mainCard!=null && <img className="uno" src={require('../img/uno.png')} />}
-                    
-                            {mainCard!=null && <div className="mainCard">
-                            <div className="mainCardPileBox">
-                                <Card card={this.state.mainCard}/>
-                            
-                            <div title='click to grab a card' onClick = {() => this.grabCardFromDesk()} className='pile newCard red'>
-                                <img className="angle" src={require('../img/unoCardBack.png')} />
-                            </div>
-                            
-                            </div>
-                            
-                            <div className="direction">Game direction:</div>
-                                <div className="direction active">{forward ? 'clockwise':'conterclockwise'}</div>
-                            
-                            
-                            
-                            </div>}
-
-                            {modal ? <PopUp onColor={this.ChooseColor} onClose={this.toggleModal}/> : null}
-
-                            {mainCard!=null && 
-                            <div className="messageBox">
-                            {messageBox.map(message=>
-                                <div className={messageBox.indexOf(message)==0 ? 'message' : 'messageExpired'}>{message}</div>
-                                )}
-                            </div>}
-                        </div>
-                        
-                    </div>
-                    {mainCard!=null && <div>
-                    <Player 
-                        key={player2.id} 
-                        player={player2} 
-                        turn={turn}
-                        nextTurn={next}
-                        onMakeTurn = {this.makeTurn}
-                        onCompleteTurn = {this.completeTurn}
-                    />
+            {PlayerContext => <Fragment>
+                {mainCard!=null && <div>
+                    <div className="Board">
+                        {this.state.players.map(player=> 
+                           <Fragment><div className='Inner'>
+                            <Player key={player.id} 
+                            player={player} 
+                            turn={turn}
+                            nextTurn={next}
+                            onMakeTurn = {this.makeTurn}
+                            onCompleteTurn = {this.completeTurn}/></div>
+                            <div className="Inner">
+                                <img className="uno" src={require('../img/uno.png')} />
+                                    {mainCard!=null && <div className="mainCard">
+                                        <div className="mainCardPileBox">
+                                            <Card card={this.state.mainCard}/>
+                                            <div title='click to grab a card' onClick = {() => this.grabCardFromDesk()} className='pile newCard red'>
+                                                <img className="angle" src={require('../img/unoCardBack.png')} />
+                                            </div>
+                                        </div>
+                                        <div className="direction">Game direction:</div>
+                                        <div className="direction active">{forward ? 'clockwise':'conterclockwise'}</div>                            
+                                    </div>}
+                                    <button onClick = {() => this.handleEndRound()}>END ROUND</button>
+                                    <button onClick = {() => this.handleAI()}>run AI</button>
+                                        {modal ? <PopUp onColor={this.ChooseColor} onClose={this.toggleModal}/> : null}
+                                    {mainCard!=null && 
+                                    <div className="messageBox">
+                                    {messageBox.map(message=>
+                                        <div className={messageBox.indexOf(message)==0 ? 'message' : 'messageExpired'}>{message}</div>
+                                        )}
+                                    </div>}
+                                </div>
+                            {gameOver && <RedirectComponent path={'gameover'} players={players}/>}
+                            </Fragment>
+                        )}
+                        </div>    
                     </div>}
-                </div>
-                <div className="bottom">
-                    <div className="leftBottomCorner">
-                    <button onClick = {() => this.handleEndRound()}>END ROUND</button>
-                    
-                    <button onClick = {() => this.handleAI()}>run AI</button>
-
-                    </div>
-                    {mainCard!=null && <div>
-                    <Player 
-                        key={player3.id} 
-                        player={player3} 
-                        turn={turn}
-                        nextTurn={next}
-                        onMakeTurn = {this.makeTurn}
-                        onCompleteTurn = {this.completeTurn}
-                    />
-                        </div>}
-                    <div>
-                        {mainCard==null && <p className='message'>Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem 
-                        ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum
-                        Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum
-                        Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum
-                        Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum
-                        </p>}
-                    </div>
-                </div>
-            </div>
-
-            {gameOver && <RedirectComponent path={'gameover'} players={players}/>}
-                </Fragment>
-        }
+                    {mainCard==null && <div className="startButton" onClick = {() => this.startNewGame()}></div>}
+                </Fragment>}
         </PlayerContext.Consumer>
-        )
-    }
+            )
+        }
 }
 
 CardDesk.contextType = PlayerContext;
 export default CardDesk;
+                        
+ 

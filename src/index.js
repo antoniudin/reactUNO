@@ -2,12 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import Tasks from './Tasks';
-import Counter from './hooks/counter';
 import reportWebVitals from './reportWebVitals';
-import HomePage from './components/HomePage';
-import CardDesk from './components/CardDesk';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter} from 'react-router-dom';
 
 ReactDOM.render(
     <BrowserRouter>
