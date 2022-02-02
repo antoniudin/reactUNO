@@ -20,8 +20,8 @@ If you face an issue or notice an error, I would like to hear about it.
 
 ###### Action Card Description
 
--**+2** - (Draw Two) – The next player will have to pick up two cards and forfeit his/her turn.
--**R** - (Reverse) – If going clockwise, switch to counterclockwise or vice versa.
--**S** - (Skip) – The next player has to skip their turn
--**W** - (Wild) - The player has to state which color it will represent for the next player.
--**+4** - (Wild Draw Four) – The next player also has to draw four cards as well as forfeit his/her turn
+* **+2** - (Draw Two) – The next player will have to pick up two cards and forfeit his/her turn.
+* **R** - (Reverse) – If going clockwise, switch to counterclockwise or vice versa.
+* **S** - (Skip) – The next player has to skip their turn
+* **W** - (Wild) - The player has to state which color it will represent for the next player.
+* **+4** - (Wild Draw Four) – The next player also has to draw four cards as well as forfeit his/her turn
