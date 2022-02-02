@@ -7,11 +7,12 @@ import FillCards from './FillCards';
 import RedirectComponent from './RedirectComponent';
 import PlayerContext from '../context/PlayerContext';
 import Card from './Card';
+import RoundOver from './RoundOver';
 
 class CardDesk extends React.Component {    
     state = {
     gameOver: false,
-    roundStatus: false,
+    round: false,
     modal:false,        
     messageBox:[],
     cards: [],
@@ -154,7 +155,8 @@ class CardDesk extends React.Component {
                 gameOver=true; 
             }
         })
-        this.setState({players, gameOver})
+        const round = true
+        this.setState({players, gameOver, round})
         this.startNewGame();
     }
     
@@ -230,7 +232,8 @@ class CardDesk extends React.Component {
 
     toggleModal = () => {
         this.setState({
-         modal: !this.state.modal
+         modal: !this.state.modal,
+         round: !this.state.round
         });
        }
 
@@ -271,11 +274,11 @@ class CardDesk extends React.Component {
        }
 
        handleAIProcessing = () => {
-
+        
        }
 
     render() { 
-        const {turn,mainCard, next, players, gameOver, roundStatus, forward, modal, messageBox} = this.state;
+        const {turn,mainCard, next, players, gameOver, round, forward, modal, messageBox} = this.state;
         return (
         <PlayerContext.Consumer>
             {PlayerContext => <Fragment>
@@ -288,12 +291,13 @@ class CardDesk extends React.Component {
                             turn={turn}
                             nextTurn={next}
                             onMakeTurn = {this.makeTurn}
+                            onGrabCard = {this.grabCardFromDesk}
                             onCompleteTurn = {this.completeTurn}/></div>
                             <div className="Inner">
                                 <img className="uno" src={require('../img/uno.png')} />
                                     {mainCard!=null && <div className="mainCard">
                                         <div className="mainCardPileBox">
-                                            <Card card={this.state.mainCard}/>
+                                            <Card card={this.state.mainCard} flipped={true}/>
                                             <div title='click to grab a card' onClick = {() => this.grabCardFromDesk()} className='pile newCard red'>
                                                 <img className="angle" src={require('../img/unoCardBack.png')} />
                                             </div>
@@ -317,8 +321,6 @@ class CardDesk extends React.Component {
                         </div>    
                     </div>}
                     
-                    
-
                     {mainCard==null && <div className="startButton" onClick = {() => this.startNewGame()}></div>}
                     
                 </Fragment>}
