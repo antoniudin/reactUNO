@@ -1,9 +1,12 @@
 import React, { Component } from 'react'
+import {Route, Routes} from 'react-router-dom';
 import PlayerContext from './context/PlayerContext'
 import CardDesk from './components/CardDesk'
 import HomePage from './components/HomePage'
-import {BrowserRouter, Route, Routes} from 'react-router-dom';
+import ErrorPage from './components/ErrorPage';
 import GameOver from './components/GameOver'
+import About from './components/About';
+
 
 class App extends Component {
   state = {
@@ -26,8 +29,10 @@ class App extends Component {
       <PlayerContext.Provider value={{players: this.state.players, onUpdate: this.handleUpdateScore, test: this.test}}
         >
           <Routes>
+            <Route path="/" element={<HomePage/>}/>
             <Route path="/game" exact element={<CardDesk/>}/>
             <Route path="/gameover" element={<GameOver/>}/>
+            <Route path="/about" element={<About/>}/>
             <Route path="/" element={<HomePage/>}/>
           </Routes>
       </PlayerContext.Provider>
