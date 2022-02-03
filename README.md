@@ -14,7 +14,6 @@ If you face an issue or notice an error, I would like to hear about it.
 - [x] Game log
 - [ ] Complete "say Uno" component
 - [ ] Automate gameplay for two players
-- [ ] Add the ability to use your name and implement the table
 
 ![example](/assets/gameplay.png)
 
