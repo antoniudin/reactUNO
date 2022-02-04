@@ -12,8 +12,9 @@ class Player extends Component {
                  
                  {player.id==turn && <button className="customButton" onClick={onCompleteTurn.bind(this, player.id)}>Skip</button>}
                  {player.id==turn && <button className="customButton" onClick={onGrabCard.bind(this, player.id)}>Grab a card</button>}
-                 {/* <button className="customButton">" UNO! "</button> */}
+                 {player.cards.length==1 && <button className="cloudUno"> UNO! </button>}
                 
+
                  <div className='playerCards'>
                  {player.cards.map(PlayerCard=>
                     <Card flipped={player.id==turn ? true : false} key={PlayerCard.id} card={PlayerCard} onClick={onMakeTurn.bind(this, player.id, PlayerCard.id)}/>

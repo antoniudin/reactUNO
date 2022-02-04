@@ -19,13 +19,15 @@ class App extends Component {
     this.setState({players: updatedPlayers})
   }
 
-  test = () => {
+  handlePopulatePlayers = () => {
     console.log("first");
   }
-  
+
   render() {
     return (
-      <PlayerContext.Provider value={{players: this.state.players, onUpdate: this.handleUpdateScore, test: this.test}}
+      <PlayerContext.Provider value={{players: this.state.players, 
+        onUpdate: this.handleUpdateScore, 
+        onPopulate: this.handlePopulatePlayers}}
         >
           <Routes>
             <Route path="/" element={<HomePage/>}/>
