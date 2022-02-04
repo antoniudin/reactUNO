@@ -15,7 +15,7 @@ export default function GameOver(props) {
               )}   
             <div className='goButtonsContainer'>
               <div className='gameOverHome' onClick = {()=> setData('')}></div>
-              <div className='gameOverPlay' onClick = {()=> setData('/game')}></div>
+              <div className='gameOverPlay' onClick = {()=> setData('game')}></div>
             </div>
           </div>
     </div>;
