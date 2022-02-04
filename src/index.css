@@ -105,15 +105,17 @@ code {
 
 .playerBoard {
   margin-top: 25px;
-  margin-left: 25%;
+  margin-left: 20%;
 }
 
 .playerCards {
   display: grid;
   margin-top: 2%;
-  width:350px;
+  /* width:350px; */
+  width:max-content;
   grid-template-columns: repeat(7, 1fr);
-  row-gap: 10px;
+  row-gap: 8px;
+  margin-bottom: 10px;
 }
 
 .noActive, .mainCard {
@@ -126,7 +128,7 @@ code {
 }
 
 .pile {
-  margin-left:10px;
+  
 }
 
 .mainCardPileBox {
@@ -345,6 +347,7 @@ transform: translate(-50%, -50%);
   border: 2px solid white;
   font-weight: bold;
   position: relative;
+  margin-right: 4px;
 }
 
 .mdl, .mdl2 {
@@ -394,16 +397,19 @@ transform: translate(-50%, -50%);
 }
 
 .Inner:nth-child(even) {
-  visibility: hidden;
+  /* visibility: hidden; */
+  content-visibility: hidden;
   background-color: black;
 }
 
 .Inner:nth-child(2) {
+  content-visibility: visible;
   visibility: visible;
   display: flex;
   flex-direction: column;
   align-items: center;
   background-color:brown;
+  z-index: 1;
 }
 
 .Inner:nth-child(odd) {
@@ -413,4 +419,5 @@ transform: translate(-50%, -50%);
 .Inner:nth-child(5) {
   margin-left: -25%;
   background-color: black;
+  z-index: 0;
 }

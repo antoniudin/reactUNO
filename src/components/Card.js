@@ -12,7 +12,7 @@ const Card = <div onClick={onClick} className={`newCard unoCard ${flipped ? card
   <div className='u_d'>{card.value}</div>
 </div> 
 
-const FlippedCard = <div className='pile newCard red'>
+const FlippedCard = <div className='pile newCard unoCard red'>
   <img className="angle" src={require('../img/unoCardBack.png')} />
 </div>
 

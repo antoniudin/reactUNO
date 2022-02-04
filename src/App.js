@@ -3,7 +3,6 @@ import {Route, Routes} from 'react-router-dom';
 import PlayerContext from './context/PlayerContext'
 import CardDesk from './components/CardDesk'
 import HomePage from './components/HomePage'
-import ErrorPage from './components/ErrorPage';
 import GameOver from './components/GameOver'
 import About from './components/About';
 
@@ -33,7 +32,6 @@ class App extends Component {
             <Route path="/game" exact element={<CardDesk/>}/>
             <Route path="/gameover" element={<GameOver/>}/>
             <Route path="/about" element={<About/>}/>
-            <Route path="/" element={<HomePage/>}/>
           </Routes>
       </PlayerContext.Provider>
     )
