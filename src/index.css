@@ -193,6 +193,18 @@ code {
   color:black;
 }
 
+.cloudUno {
+    width:max-content;
+    border:none;
+    border-radius: 5px;
+    background-color: grey;
+    font-size: medium;
+    font-weight: bold;
+    padding:9px;
+    margin-right: 3px;
+    background-color: white;
+}
+
 .colorCards {
   display: grid;
   grid-template-columns: repeat(4, 1fr);

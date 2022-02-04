@@ -18,7 +18,7 @@ class CardDesk extends React.Component {
     cards: [],
     mainCard: null,
     forward: true,
-    amount: 15,
+    amount: 5,
     turn: 1,
     nextTurn: 2,
     desk: [],
@@ -37,9 +37,9 @@ class CardDesk extends React.Component {
         this.setState({desk,cards})
     }
     
-    handleMessage = (message) => {
+    handleMessage = (message) => {        
         const messageBox = this.state.messageBox;
-        messageBox.unshift(message)
+        messageBox.unshift(message.replace('W', 'wild card'))
         this.setState({messageBox})
     }
 
@@ -84,14 +84,14 @@ class CardDesk extends React.Component {
             const mainCard = this.state.mainCard;
             const currentCard = this.state.cards.find(card=> card.id===cardId)
             if (currentCard.value==="W" || currentCard.value==="+4") {
-                this.handleMessage(`player ${playerId} used ${currentCard.value} ${currentCard.color}`)
+                this.handleMessage(`player ${playerId} played ${currentCard.value} ${currentCard.color}`)
                 this.removeCardFromPlayerBoard(cardId, playerId)
                 this.checkSpecialCards(cardId, playerId);
                 return true;
             }
 
             if (mainCard.color===currentCard.color || mainCard.value===currentCard.value) {
-                this.handleMessage(`player ${playerId} used ${currentCard.value} ${currentCard.color}`)
+                this.handleMessage(`player ${playerId} played ${currentCard.value} ${currentCard.color}`)
                 this.removeCardFromPlayerBoard(cardId, playerId)
                 this.completeTurn(playerId);
                 this.checkSpecialCards(cardId);
@@ -190,7 +190,7 @@ class CardDesk extends React.Component {
     }
 
     checkRoundIsOver = (playerId) => {
-        const player = this.state.players.find(player=> player.id==playerId)
+        const player = this.state.players.find(player=> player.id==playerId)    
         if (player.cards.length===0) {
             this.handleEndRound();    
         }
@@ -202,7 +202,7 @@ class CardDesk extends React.Component {
         let nextTurn=turn+1;
         if (nextTurn>3) nextTurn=1
         this.setState({turn, nextTurn})
-        // this.handleMessage(`Player's ${turn} turn`)
+        this.handleMessage(`Player's ${turn} turn`)
     }
 
     makeBackwardTurn = (playerId) => {
@@ -211,7 +211,7 @@ class CardDesk extends React.Component {
         let nextTurn=turn-1;
         if (nextTurn<1) nextTurn=3;
         this.setState({turn, nextTurn})
-        // this.handleMessage(`Player's ${turn} turn`)
+        this.handleMessage(`Player's ${turn} turn`)
     }
 
     changeDirection = () => {
@@ -267,7 +267,7 @@ class CardDesk extends React.Component {
         }
 
        ChooseColor = (color) => {
-        this.handleMessage(`${color} color was choosed`);
+        this.handleMessage(`${color} was chosen`);
         const mainCard = this.state.mainCard;
         mainCard.color=color;
         this.setState({mainCard})
