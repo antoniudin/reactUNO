@@ -1,7 +1,5 @@
 import React from 'react';
 
-const colors = ['blue','yellow','green','red']
-
 function noSpecial (playerCards) {
     let best = 0 
     let bestCard;
@@ -13,25 +11,10 @@ function noSpecial (playerCards) {
     }) 
     return bestCard;
 }
- 
-export function colorAI(playerId) {
-    
-    console.log('123');
-}
-function colorPlayerNeed (playerCards) {
-    //have to consider if player has only wild cards
-    let colors = ['yellow','red','green','blue']
-        const color = colors[Math.floor(Math.random()*colors.length)]
-        localStorage.setItem("color",color)
-}
 
 function manySpecial (sortedCards, playerCards) {
     const card = sortedCards[Math.floor(Math.random()*sortedCards.length)]
-    if (card.color=='W') {
-        colorPlayerNeed(playerCards)
-        return card
-    }
-        return card
+    return card
     }
 
 export default function AI(playerCards) {

@@ -1,9 +1,16 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 
 export default function PopUp(props) {
   
   const colors = ['yellow','green', 'red', 'blue']
+
+  useEffect (()=> {
+    if (props.playerId!=3) {
+      console.log(props.playerId);
+      props.onAIColor()
+    }
+  },[])
 
   function handleChooseColor(color) {
     props.onClose()

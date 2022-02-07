@@ -3,7 +3,7 @@ import Card from './Card';
 
 class Player extends Component {
     render() { 
-        const {player, turn, nextTurn, onMakeTurn, onCompleteTurn, onGrabCard, mainCard} = this.props;
+        const {player, turn, onMakeTurn, onCompleteTurn, onGrabCard} = this.props;
         return (
             <div className='playerBoard'>
                 <div className='playerTitleLine'><div className={(turn===player.id ? 'active' : 'noActive')}>{player.name}</div>
@@ -14,7 +14,6 @@ class Player extends Component {
                  {player.id==turn && <button className="customButton" onClick={onGrabCard.bind(this, player.id)}>Grab a card</button>}
                  {player.cards.length==1 && <button className="cloudUno"> UNO! </button>}
                 
-
                  <div className='playerCards'>
                  {player.cards.map(PlayerCard=>
                     <Card flipped={player.id==turn ? true : false} key={PlayerCard.id} card={PlayerCard} onClick={onMakeTurn.bind(this, player.id, PlayerCard.id)}/>

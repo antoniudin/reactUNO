@@ -239,7 +239,7 @@ code {
 }
 
 .messageBox {
-  bottom:2px;
+  bottom:10px;
   width: 350px;
   height:3em;
   overflow-y:auto;
