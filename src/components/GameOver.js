@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useNavigate } from 'react';
+import React, { useContext, useState } from 'react';
 import PlayerContext from '../context/PlayerContext';
 import RedirectComponent from './RedirectComponent';
 

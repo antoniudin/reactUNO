@@ -6,10 +6,11 @@ export default function FillCards(colors) {
     let cards = []
     for (var i=0; i<values.length; i++) {
         colors.map(function(color){
-            const card = {id:index, color:color,value:values[i]}
+            const card = {id:index, color:color,value:values[i],score:parseInt(values[i])}
             cards.push(card)
             index++;
-            if (card.value=='W' || card.value=='+4' ) card.color="W";
+            if (card.value==='W' || card.value==='+4') card.color="W";
+            if (card.value=='W' || card.value==='+4' || card.value==='+2' || card.value==='S' || card.value==='R') card.score=20
         })
     }
     
