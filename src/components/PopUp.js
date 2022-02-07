@@ -1,29 +1,24 @@
 
-import React, { Component } from "react";
+import React from 'react';
 
-export default class PopUp extends Component {
+export default function PopUp(props) {
   
-  handleClose = () => {
-   this.props.onClose();
-  };
-
-  handleChooseColor = (color) => {
-    this.props.onClose();
-    this.props.onColor(color);
-   };
-
-render() {
-  const {onClose, onChooseColor} = this.props;
   const colors = ['yellow','green', 'red', 'blue']
-  return (
-   <div className="modal">
-      <div className="direction">Choose a color:</div>
-      <div className="colorCards">
-        {colors.map(color=> 
-            <div key={color} onClick={()=> this.handleChooseColor(color)} className={`card ${color}`}></div>  
+
+  function handleChooseColor(color) {
+    props.onClose()
+    props.onColor(color)
+  }
+  
+  return  <div className="modal">
+       <div className="direction">Choose a color:</div>
+       <div className="colorCards">
+         {colors.map(color=> 
+            <div key={color} onClick={()=> handleChooseColor(color)} className={`card ${color}`}></div>  
           )}
       </div>
-    </div>
-  );
- }
+    </div>;
 }
+
+
+
