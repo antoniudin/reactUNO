@@ -36,20 +36,21 @@ class CardDesk extends React.Component {
         const desk = FillDesk(); 
         this.setState({desk,cards})
     }
-    
-    getData(){
-        if (this.state.turn!=3) {
-            setTimeout(() => {
-            // console.log(`who you gonna call ${this.state.turn}`);
-                //   this.handleAI(this.state.turn)
-            }, 2000)
-        }
-      }
-    
-      componentDidUpdate(prevProps, prevState){
-        if (prevState.turn!==this.state.turn) this.getData();
-      }
 
+
+    // componentDidUpdate(prevProps, prevState, snapshot){
+    //     if (prevProps.turn!=this.state.turn) this.test()
+    // }
+        
+    
+
+
+    // test(){
+    //     setTimeout(() => {
+    //         if (this.state.turn!=3) this.handleAI(this.state.turn)
+    //     }, 3000)
+    //   }
+      
     handleMessage = (message) => {        
         const messageBox = this.state.messageBox;
         messageBox.unshift(message.replace('W', 'wild card'))
@@ -129,16 +130,29 @@ class CardDesk extends React.Component {
         this.setState({mainCard})
         this.handleMessage(`player ${nextTurn} pick up 4 cards!`);
         this.handleMessage(`player ${turn} is choosing a color`);
-        this.handleCardToPlayer(nextTurn, 4)
+        //>>>>??????>>>>>>>
+        if (turn!=3) {
+            this.handleAIColor()
+            this.forceCompleteTurn(nextTurn)
+            this.handleCardToPlayer(nextTurn, 4)
+            return null
+        }
         const four = true;
+        this.handleCardToPlayer(nextTurn, 4)
         this.toggleModal(cardId, playerId, four);
     }
 
+    
     handleWildCard = (cardId, playerId) => {
         const {cards, turn} = this.state
         const mainCard = cards.find(card => card.id==cardId)
         mainCard.color='white'
         this.setState({mainCard})
+        if (turn!=3) {
+            this.handleAIColor()
+            this.forceCompleteTurn(turn)
+            return null
+        }
         this.handleMessage(`wild card! player ${turn} is choosing a color`);
         this.toggleModal(cardId, playerId);
     }
@@ -326,7 +340,6 @@ class CardDesk extends React.Component {
             })
             colors.reverse()
             this.ChooseColor(colors[0])
-            this.toggleModal()
         }
     
 
@@ -360,7 +373,7 @@ class CardDesk extends React.Component {
                                     </div>}
                                     <button onClick = {() => this.handleEndRound()}>END ROUND</button>
                                     <button onClick = {() => this.handleAI(this.state.turn)}>run AI</button>
-                                        {modal ? <PopUp playerId={turn} onAIColor={this.handleAIColor} onColor={this.ChooseColor} onClose={this.toggleModal}/> : null}
+                                        {modal && turn==3 ? <PopUp playerId={turn} onAIColor={this.handleAIColor} onColor={this.ChooseColor} onClose={this.toggleModal}/> : null}
                                     {mainCard!=null && 
                                     <div className="messageBox">
                                     {messageBox.map(message=>
