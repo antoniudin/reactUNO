@@ -123,12 +123,8 @@ code {
   font-weight: bold;
 }
 
-.mainCard {
+.mainCard, .uno {
   margin-top: 20px;
-}
-
-.pile {
-  
 }
 
 .mainCardPileBox {
@@ -214,10 +210,6 @@ code {
 
 .textwhite {
   color: white;
-}
-
-.uno {
-  margin-top: 20px;
 }
 
 .startButton {
@@ -414,7 +406,6 @@ transform: translate(-50%, -50%);
 }
 
 .Inner:nth-child(even) {
-  /* visibility: hidden; */
   content-visibility: hidden;
   background-color: black;
 }
