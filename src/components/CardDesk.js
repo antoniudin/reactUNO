@@ -37,20 +37,18 @@ class CardDesk extends React.Component {
         this.setState({desk,cards})
     }
 
-
-    // componentDidUpdate(prevProps, prevState, snapshot){
-    //     if (prevProps.turn!=this.state.turn) this.test()
-    // }
-        
-    
-
-
-    // test(){
-    //     setTimeout(() => {
-    //         if (this.state.turn!=3) this.handleAI(this.state.turn)
-    //     }, 3000)
-    //   }
+    handleDelay(turn){
+        setTimeout(() => {this.handleAI(turn)}, 3000)
+      }
       
+      getCard (cardId) {
+        return this.state.cards.find(card => card.id===cardId)
+      }
+
+      getPlayer (playerId) {
+        return this.state.players.find(player => player.id===playerId)
+      }
+
     handleMessage = (message) => {        
         const messageBox = this.state.messageBox;
         messageBox.unshift(message.replace('W', 'wild card'))
@@ -58,28 +56,29 @@ class CardDesk extends React.Component {
     }
 
     startNewGame = (winner) => {
-        const desk = FillDesk(); 
+        const {players, amount, turn} = this.state
+        const desk = FillDesk()
         if (winner) this.setState({turn:winner})
-        this.handleMessage(`Player's ${this.state.turn} turn`)
+        this.handleMessage(`Player's ${turn} turn`)
         this.setState({desk})
-        this.state.players.map((i)=> this.clearPlayersHand(i.id));
-        this.initiateMainCard();
-        this.state.players.map((i)=> this.handleCardToPlayer(i.id, this.state.amount))
+        players.forEach((player)=> this.clearPlayersHand(player.id))
+        this.initiateMainCard()
+        players.forEach((player)=> this.handleCardToPlayer(player.id, amount))
     }
 
    clearPlayersHand = (playerId) => {
-    const player = this.state.players.find(player => player.id==playerId);
+    const player = this.getPlayer(playerId)
     player.cards = [];
     this.setState({player})
    }
 
     updateMainCard = (cardId) => {
-        const mainCard = this.state.cards.find(card => card.id===cardId)
+        const mainCard = this.getCard(cardId)
         this.setState({mainCard})
     }
 
     removeCardFromPlayerBoard = (cardId, playerId) => {
-        const player = this.state.players.find(player => player.id===playerId)
+        const player = this.getPlayer(playerId)
         const card = player.cards.find(card => card.id===cardId)
         const index = player.cards.indexOf(card)
         player.cards.splice(index,1);
@@ -108,8 +107,9 @@ class CardDesk extends React.Component {
             if (mainCard.color===currentCard.color || mainCard.value===currentCard.value) {
                 this.handleMessage(`player ${playerId} played ${currentCard.value} ${currentCard.color}`)
                 this.removeCardFromPlayerBoard(cardId, playerId)
-                this.completeTurn(playerId);
+                /////two strins changed ?>>>>?>???>????>>>>
                 this.checkSpecialCards(cardId, playerId);
+                // this.completeTurn(playerId);
             return true;
         } 
         return false
@@ -119,7 +119,6 @@ class CardDesk extends React.Component {
         const {nextTurn} =this.state
         this.handleCardToPlayer(nextTurn, 2)
         this.handleMessage(`Player ${nextTurn} pick up 2 cards and forfeit his turn`);
-        console.log(`That huy is going to skip ${nextTurn}`);
         this.forceCompleteTurn(nextTurn)
     }
 
@@ -165,7 +164,6 @@ class CardDesk extends React.Component {
     handleSkipCard = (cardId) => {
         this.handleMessage(`player ${this.state.nextTurn} is skipping his turn!`)
         this.forceCompleteTurn(this.state.nextTurn)
-        this.forceCompleteTurn(this.state.nextTurn)
     }
 
     checkSpecialCards = (cardId, playerId) => {
@@ -176,6 +174,7 @@ class CardDesk extends React.Component {
             case '+2' : this.handleTwoCard(); break;
             case '+4' : this.handleFourCard(cardId, playerId); break;
             case 'W' : this.handleWildCard(cardId, playerId); break;
+            default: this.completeTurn(playerId); break;
         }
     }
 
@@ -204,25 +203,24 @@ class CardDesk extends React.Component {
     }
     
     completeTurn = (playerId) => {
-        if (playerId!=this.state.turn || this.state.modal) return null
+        const {turn, modal, forward} = this.state
+        if (playerId!=turn || modal) return null
         else {
-            const player = this.state.players.find(player=> player.id===playerId)
+            const player = this.getPlayer(playerId)
             player.desk=false
-            if (this.state.forward) this.makeForwardTurn(playerId);
+            if (forward) this.makeForwardTurn(playerId);
             else this.makeBackwardTurn(playerId);
         }
-        console.log("checking if round is over");
         this.checkRoundIsOver(playerId);
     }
 
     forceCompleteTurn = (playerId) => {
-        console.log(`force force orce${playerId}`);
         if (this.state.forward) this.makeForwardTurn(playerId);
         else this.makeBackwardTurn(playerId);
     }
 
     checkRoundIsOver = (playerId) => {
-        const player = this.state.players.find(player=> player.id==playerId)    
+        const player = this.getPlayer(playerId)
         if (player.cards.length===0) {
             this.handleEndRound();    
         }
@@ -234,8 +232,8 @@ class CardDesk extends React.Component {
         let nextTurn=turn+1;
         if (nextTurn>3) nextTurn=1
         this.setState({turn, nextTurn})
-        console.log(`where is it ${turn}`);
         this.handleMessage(`Player's ${turn} turn`)
+        if (turn!=3 ) this.handleDelay(turn)
     }
     
 
@@ -245,20 +243,21 @@ class CardDesk extends React.Component {
         let nextTurn=turn-1;
         if (nextTurn<1) nextTurn=3;
         this.setState({turn, nextTurn})
-        console.log(`where is it ${turn}`);
         this.handleMessage(`Player's ${turn} turn`)
+        if (turn!=3 ) this.handleDelay(turn)
     }
 
     changeDirection = () => {
-        this.state.forward = !this.state.forward
-        this.completeTurn(this.state.turn)
+        const {forward, turn} = this.state
+        forward = !forward
+        this.completeTurn(turn)
     }
 
     handleCardToPlayer = (playerId, amountOfCards) => {
         let counter = 0;
         while (counter<amountOfCards) {
             const result = this.takeCardFromDesk();
-            const player = this.state.players.find(player => player.id===playerId)
+            const player = this.getPlayer(playerId)
             player.cards.push(result)
             counter++;
             this.setState({player})
@@ -266,51 +265,53 @@ class CardDesk extends React.Component {
     }
 
     takeCardFromDesk = () => {
-        const desk = this.state.desk;
+        const {desk, cards} = this.state
         const card = desk[Math.floor(Math.random()*desk.length)]
         const cardIndex = desk.indexOf(card)
         desk.splice(cardIndex,1);
-        const currentCard = this.state.cards.find(c => c.id===card);
+        const currentCard = cards.find(c => c.id===card);
         this.setState({desk})
         return currentCard;
     }
 
-    toggleModal = (cardId, playerId, four) => {
+       toggleModal = (cardId, playerId, four) => {
+        const {memo, modal, round, nextTurn} = this.state
         if (cardId) this.setState({memo: [playerId, four]})
-        if (this.state.memo!=null) {
-            if (this.state.memo[1]==true) {
-                this.forceCompleteTurn(this.state.nextTurn)
-            } else this.forceCompleteTurn(this.state.memo[0]);
+        if (memo!=null) {
+            if (memo[1]==true) {
+                this.forceCompleteTurn(nextTurn)
+            } else this.forceCompleteTurn(memo[0]);
         this.setState({memo:null})
         }
         this.setState({
-         modal: !this.state.modal,
-         round: !this.state.round
+         modal: !modal,
+         round: !round
         });
        }
 
         grabCardFromDesk = () =>{
-            const player = this.state.players.find(player => player.id===this.state.turn)
-            if (!player.desk && !this.state.modal) {
+            const {turn, modal} = this.state;
+            const player = this.getPlayer(turn)
+            if (!player.desk && !modal) {
                 player.desk = true;
-                this.handleCardToPlayer(this.state.turn, 1)
-                this.handleMessage(`player ${this.state.turn} picked up a card`)
+                this.handleCardToPlayer(turn, 1)
+                this.handleMessage(`player ${turn} picked up a card`)
             } else return null
         }
 
        ChooseColor = (color) => {
-        this.handleMessage(`${color} was chosen`);
         const mainCard = this.state.mainCard;
         mainCard.color=color;
         this.setState({mainCard})
+        this.handleMessage(`${color} was chosen`);
        }
 
        handleAI = (playerId) => {
         const {players, mainCard} = this.state;
-        const player = players.find(player => player.id==playerId)
+        const player = this.getPlayer(playerId)
         const playerCards = []
         player.cards.forEach((card)=> {
-            if (card.value===mainCard.value || card.color==mainCard.color || card.color=='W') playerCards.push(card);
+            if (card.value===mainCard.value || card.color===mainCard.color || card.color==='W') playerCards.push(card);
         })
          switch (playerCards.length) {
             case 0: this.handleAIZero(player.id); break;
@@ -320,7 +321,7 @@ class CardDesk extends React.Component {
        }
 
         handleAIZero = (playerId) => {
-            const player = this.state.players.find(player => player.id==playerId)
+            const player = this.getPlayer(playerId)
             if (player.desk==true) this.completeTurn(playerId)
             else {this.grabCardFromDesk(playerId,1);
             this.handleAI(playerId);}
@@ -332,9 +333,8 @@ class CardDesk extends React.Component {
         }
 
         handleAIColor = () => {
-            console.log("handleAI color raised");
             const colors=[]
-            const player = this.state.players.find(player => player.id==this.state.turn)
+            const player = this.getPlayer(this.state.turn)
             player.cards.forEach(card => {
                 if (card.color!='W') colors.push(card.color)
             })
@@ -344,7 +344,7 @@ class CardDesk extends React.Component {
     
 
     render() { 
-        const {turn, mainCard, next, players, gameOver, round, forward, modal, messageBox} = this.state;
+        const {turn, mainCard, next, players, gameOver, forward, nextTurn, modal, messageBox} = this.state;
         return (
         <PlayerContext.Consumer>
             {PlayerContext => <Fragment>
@@ -370,14 +370,15 @@ class CardDesk extends React.Component {
                                         </div>
                                         <div className="direction">Game direction:</div>
                                         <div className="direction active">{forward ? 'clockwise':'conterclockwise'}</div>                            
+                                        <p>{turn}</p><p>{nextTurn}</p>
                                     </div>}
                                     <button onClick = {() => this.handleEndRound()}>END ROUND</button>
                                     <button onClick = {() => this.handleAI(this.state.turn)}>run AI</button>
                                         {modal && turn==3 ? <PopUp playerId={turn} onAIColor={this.handleAIColor} onColor={this.ChooseColor} onClose={this.toggleModal}/> : null}
                                     {mainCard!=null && 
                                     <div className="messageBox">
-                                    {messageBox.map(message=>
-                                        <div className={messageBox.indexOf(message)==0 ? 'message' : 'messageExpired'}>{message}</div>
+                                    {messageBox.map(message=> 
+                                        <div className={messageBox.indexOf(message)===0 ? 'message' : 'messageExpired'}>{message}</div>
                                         )}
                                     </div>}
                                 </div>
