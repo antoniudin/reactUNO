@@ -1,5 +1,9 @@
 import React from 'react';
 
+
+
+
+
 function noSpecial (playerCards) {
     let best = 0 
     let bestCard;
@@ -15,7 +19,7 @@ function noSpecial (playerCards) {
 function manySpecial (sortedCards, playerCards) {
     const card = sortedCards[Math.floor(Math.random()*sortedCards.length)]
     return card
-    }
+}
 
 export default function AI(playerCards) {
     let sortedCards=[];
@@ -28,7 +32,5 @@ export default function AI(playerCards) {
     switch (sortedCards.length) {
         case 0: return noSpecial(playerCards); break;
         default: return manySpecial(sortedCards, playerCards); break;
-    }
-        
-        
+    }       
 }

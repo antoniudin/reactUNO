@@ -9,8 +9,10 @@ import PlayerContext from '../context/PlayerContext';
 import Card from './Card';
 import AI from './AI';
 
+
 class CardDesk extends React.Component {    
     state = {
+    test:1,
     gameOver: false,
     round: false,
     modal:false,        
@@ -18,7 +20,7 @@ class CardDesk extends React.Component {
     cards: [],
     mainCard: null,
     forward: true,
-    amount: 5,
+    amount: 7,
     turn: 3,
     nextTurn: 1,
     desk: [],
@@ -88,7 +90,7 @@ class CardDesk extends React.Component {
 
     makeTurn = (playerId, cardId) => {
         if (playerId==this.state.turn && !this.state.modal) {
-            const currentCard = this.state.cards.find(card=> card.id===cardId)  
+            const currentCard = this.getCard(cardId)
             this.compareTwoCards(cardId, playerId)
         } else return null
         this.checkRoundIsOver(playerId);
@@ -96,20 +98,12 @@ class CardDesk extends React.Component {
 
 
     compareTwoCards = (cardId, playerId) => {
-            const mainCard = this.state.mainCard;
-            const currentCard = this.state.cards.find(card=> card.id===cardId)
-            if (currentCard.value==="W" || currentCard.value==="+4") {
-                this.handleMessage(`player ${playerId} played ${currentCard.value} ${currentCard.color}`)
-                this.removeCardFromPlayerBoard(cardId, playerId)
-                this.checkSpecialCards(cardId, playerId);
-                return true;
-            }
-            if (mainCard.color===currentCard.color || mainCard.value===currentCard.value) {
-                this.handleMessage(`player ${playerId} played ${currentCard.value} ${currentCard.color}`)
-                this.removeCardFromPlayerBoard(cardId, playerId)
-                /////two strins changed ?>>>>?>???>????>>>>
-                this.checkSpecialCards(cardId, playerId);
-                // this.completeTurn(playerId);
+        const mainCard = this.state.mainCard;
+        const currentCard = this.getCard(cardId)
+        if (mainCard.color===currentCard.color || mainCard.value===currentCard.value || currentCard.color==="W") {
+            this.handleMessage(`player ${playerId} played ${currentCard.value} ${currentCard.color}`)
+            this.removeCardFromPlayerBoard(cardId, playerId)
+            this.checkSpecialCards(cardId, playerId);
             return true;
         } 
         return false
@@ -129,7 +123,6 @@ class CardDesk extends React.Component {
         this.setState({mainCard})
         this.handleMessage(`player ${nextTurn} pick up 4 cards!`);
         this.handleMessage(`player ${turn} is choosing a color`);
-        //>>>>??????>>>>>>>
         if (turn!=3) {
             this.handleAIColor()
             this.forceCompleteTurn(nextTurn)
@@ -167,7 +160,7 @@ class CardDesk extends React.Component {
     }
 
     checkSpecialCards = (cardId, playerId) => {
-        const card = this.state.cards.find(card => card.id===cardId)
+        const card = this.getCard(cardId)
         switch (card.value) {
             case 'R' : this.handleReverseCard(); break;
             case 'S' : this.handleSkipCard(); break;
@@ -179,7 +172,6 @@ class CardDesk extends React.Component {
     }
 
     initiateMainCard = () => {
-        //this method is raised only once in the beginning of the game
         const mainCard = this.takeCardFromDesk()
         if (mainCard.color=='W') mainCard.color = this.state.colors[Math.floor(Math.random()*this.state.colors.length)]
         this.setState({mainCard})
@@ -231,25 +223,26 @@ class CardDesk extends React.Component {
         if (playerId<3) turn++; else turn = 1;
         let nextTurn=turn+1;
         if (nextTurn>3) nextTurn=1
-        this.setState({turn, nextTurn})
-        this.handleMessage(`Player's ${turn} turn`)
-        if (turn!=3 ) this.handleDelay(turn)
+        this.turnHelper(turn, nextTurn)
     }
     
-
     makeBackwardTurn = (playerId) => {
         let turn = playerId;
         if (playerId>1) turn--; else turn = 3
         let nextTurn=turn-1;
         if (nextTurn<1) nextTurn=3;
+        this.turnHelper(turn, nextTurn)
+    }
+
+    turnHelper = (turn, nextTurn) => {
         this.setState({turn, nextTurn})
         this.handleMessage(`Player's ${turn} turn`)
         if (turn!=3 ) this.handleDelay(turn)
     }
 
     changeDirection = () => {
-        const {forward, turn} = this.state
-        forward = !forward
+        const {turn} = this.state
+        this.state.forward = !this.state.forward
         this.completeTurn(turn)
     }
 
@@ -341,7 +334,6 @@ class CardDesk extends React.Component {
             colors.reverse()
             this.ChooseColor(colors[0])
         }
-    
 
     render() { 
         const {turn, mainCard, next, players, gameOver, forward, nextTurn, modal, messageBox} = this.state;
@@ -370,10 +362,9 @@ class CardDesk extends React.Component {
                                         </div>
                                         <div className="direction">Game direction:</div>
                                         <div className="direction active">{forward ? 'clockwise':'conterclockwise'}</div>                            
-                                        <p>{turn}</p><p>{nextTurn}</p>
                                     </div>}
-                                    <button onClick = {() => this.handleEndRound()}>END ROUND</button>
-                                    <button onClick = {() => this.handleAI(this.state.turn)}>run AI</button>
+                                    {/* <button onClick = {() => this.handleEndRound()}>END ROUND</button>
+                                    <button onClick = {() => this.handleAI(this.state.turn)}>run AI</button> */}
                                         {modal && turn==3 ? <PopUp playerId={turn} onAIColor={this.handleAIColor} onColor={this.ChooseColor} onClose={this.toggleModal}/> : null}
                                     {mainCard!=null && 
                                     <div className="messageBox">

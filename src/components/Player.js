@@ -10,13 +10,13 @@ class Player extends Component {
                  {turn===player.id && <div className='playerIsGoing'>is going to make a turn</div>}</div>
                  <div className='scoreTitle'>Score: {player.score}</div>
                  
-                 {player.id==turn && <button className="customButton" onClick={onCompleteTurn.bind(this, player.id)}>Skip</button>}
-                 {player.id==turn && <button className="customButton" onClick={onGrabCard.bind(this, player.id)}>Grab a card</button>}
+                 {player.id==turn && player.id==3 && <button className="customButton" onClick={onCompleteTurn.bind(this, player.id)}>Skip</button>}
+                 {player.id==turn && player.id==3 && <button className="customButton" onClick={onGrabCard.bind(this, player.id)}>Grab a card</button>}
                  {player.cards.length==1 && <button className="cloudUno"> UNO! </button>}
                 
                  <div className='playerCards'>
                  {player.cards.map(PlayerCard=>
-                    <Card flipped={player.id==turn ? true : false} key={PlayerCard.id} card={PlayerCard} onClick={onMakeTurn.bind(this, player.id, PlayerCard.id)}/>
+                    <Card flipped={player.id==3 ? true : false} key={PlayerCard.id} card={PlayerCard} onClick={onMakeTurn.bind(this, player.id, PlayerCard.id)}/>
                     )}
                     </div>
             </div>
