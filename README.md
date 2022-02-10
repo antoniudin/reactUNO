@@ -12,10 +12,11 @@ If you face an issue or notice an error, I would like to hear about it.
 
 - [x] Main game functions
 - [x] Game log
-- [ ] Complete "say Uno" component
-- [ ] Automate gameplay for two players
+- [x] Complete "say Uno" component
+- [x] Automate gameplay for two players
+- [ ] Add animation
 
-![example](/assets/gameplay.png)
+![example](/assets/gameplay.gif)
 
 ## Action Card Description
 
