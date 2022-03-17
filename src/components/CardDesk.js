@@ -12,7 +12,6 @@ import AI from './AI';
 
 class CardDesk extends React.Component {    
     state = {
-    test:1,
     gameOver: false,
     round: false,
     modal:false,        
@@ -363,8 +362,6 @@ class CardDesk extends React.Component {
                                         <div className="direction">Game direction:</div>
                                         <div className="direction active">{forward ? 'clockwise':'conterclockwise'}</div>                            
                                     </div>}
-                                    {/* <button onClick = {() => this.handleEndRound()}>END ROUND</button>
-                                    <button onClick = {() => this.handleAI(this.state.turn)}>run AI</button> */}
                                         {modal && turn==3 ? <PopUp playerId={turn} onAIColor={this.handleAIColor} onColor={this.ChooseColor} onClose={this.toggleModal}/> : null}
                                     {mainCard!=null && 
                                     <div className="messageBox">
